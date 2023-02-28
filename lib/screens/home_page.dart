@@ -18,7 +18,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<ApneadiagState>();
-    appState.getId();
     var id = appState.id;
 
     if (id.isEmpty) {

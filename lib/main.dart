@@ -6,17 +6,43 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apneadiag/screens/home_page.dart';
 import 'package:path_provider/path_provider.dart';
 
-void main() {
-  runApp(const Apneadiag());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Prepare everything before running the app
+  final prefs = await SharedPreferences.getInstance();
+  final id = prefs.getString('id') ?? '';
+  final lastRecording = prefs.getString('lastRecording') ?? '';
+  final path = await getApplicationDocumentsDirectory();
+  FlutterSoundRecorder? recorder = FlutterSoundRecorder();
+  await Permission.microphone.request();
+  await recorder.openRecorder();
+
+  runApp(Apneadiag(
+      id: id,
+      path: path.path,
+      recorder: recorder,
+      lastRecording: lastRecording));
 }
 
 class Apneadiag extends StatelessWidget {
-  const Apneadiag({super.key});
+  const Apneadiag({
+    super.key,
+    required this.id,
+    required this.path,
+    required this.recorder,
+    required this.lastRecording,
+  });
+
+  final String id;
+  final String path;
+  final FlutterSoundRecorder recorder;
+  final String lastRecording;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => ApneadiagState(),
+      create: (context) => ApneadiagState(id, path, recorder, lastRecording),
       child: MaterialApp(
         title: 'Apneadiag',
         theme: ThemeData(
@@ -30,59 +56,44 @@ class Apneadiag extends StatelessWidget {
 }
 
 class ApneadiagState extends ChangeNotifier {
-  final Codec _codec = Codec.aacMP4;
-  String path = '';
-  FlutterSoundRecorder? recorder = FlutterSoundRecorder();
-  bool _recorderInitialized = false;
+  ApneadiagState(this._id, this._path, this._recorder, this._lastRecording);
 
-  Future initRecorder() async {
-    await Permission.microphone.request();
-    await recorder!.openRecorder();
-    _recorderInitialized = true;
-    notifyListeners();
-  }
+  String _id;
+  final String _path;
+  final FlutterSoundRecorder _recorder;
+  final Codec _codec = Codec.aacMP4;
+  String _lastRecording;
 
   Future startRecorder() async {
-    if (!_recorderInitialized) {
-      await initRecorder();
-    }
-    path = '${(await getApplicationDocumentsDirectory()).path}/recording.mp4';
-    await recorder!.startRecorder(toFile: path, codec: _codec);
+    _lastRecording = '$_path/${DateTime.now()}.mp4';
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('lastRecording', _lastRecording);
+    await _recorder.startRecorder(toFile: _lastRecording, codec: _codec);
     notifyListeners();
   }
 
   Future stopRecorder() async {
-    await recorder!.stopRecorder();
+    await _recorder.stopRecorder();
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    recorder!.closeRecorder();
-    recorder = null;
-    _recorderInitialized = false;
-
-    super.dispose();
-  }
-
-  String id = '';
-
-  Future getId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    id = prefs.getString('id') ?? '';
   }
 
   Future saveId(String id) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
-    this.id = id;
+    _id = id;
     notifyListeners();
   }
 
-  Future deleteId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future clean() async {
+    final prefs = await SharedPreferences.getInstance();
     prefs.remove('id');
-    this.id = '';
+    prefs.remove('lastRecording');
+    _id = '';
+    _lastRecording = '';
     notifyListeners();
   }
+
+  bool get isRecording => _recorder.isRecording;
+  String get id => _id;
+  String get lastRecording => _lastRecording;
 }

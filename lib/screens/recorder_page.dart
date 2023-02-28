@@ -9,7 +9,7 @@ class RecorderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<ApneadiagState>();
-    var isRecording = appState.recorder!.isRecording;
+    var isRecording = appState.isRecording;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleLarge!.copyWith(
