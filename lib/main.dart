@@ -4,6 +4,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apneadiag/screens/home_page.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const Apneadiag());
@@ -30,7 +31,7 @@ class Apneadiag extends StatelessWidget {
 
 class ApneadiagState extends ChangeNotifier {
   final Codec _codec = Codec.aacMP4;
-  final String path = 'recording.mp4';
+  String path = '';
   FlutterSoundRecorder? recorder = FlutterSoundRecorder();
   bool _recorderInitialized = false;
 
@@ -45,6 +46,7 @@ class ApneadiagState extends ChangeNotifier {
     if (!_recorderInitialized) {
       await initRecorder();
     }
+    path = '${(await getApplicationDocumentsDirectory()).path}/recording.mp4';
     await recorder!.startRecorder(toFile: path, codec: _codec);
     notifyListeners();
   }
