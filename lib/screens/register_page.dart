@@ -45,7 +45,7 @@ class RegisterPage extends StatelessWidget {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('ID del Paciente Vacío'),
-                        content: Text('El ID del Paciente está vacío.'),
+                        content: const Text('El ID del Paciente está vacío.'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
