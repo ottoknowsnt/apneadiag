@@ -19,7 +19,7 @@ class SoundRecorder extends ChangeNotifier {
   Future<void> start() async {
     final path = await getApplicationDocumentsDirectory();
     _lastRecordingPath =
-        '${path.path}/${DateTime.now().millisecondsSinceEpoch}.aac';
+        '${path.path}/${DateTime.now().millisecondsSinceEpoch}.wav';
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('lastRecordingPath', _lastRecordingPath);
     await _recorder.startRecorder(
