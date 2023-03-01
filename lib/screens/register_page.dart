@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:apneadiag/widgets/confirm_dialog.dart';
-import 'package:apneadiag/main.dart';
+import 'package:apneadiag/utilities/user_data.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<ApneadiagState>();
+    var userData = context.watch<UserData>();
     String id = '';
 
     var theme = Theme.of(context);
@@ -61,7 +61,7 @@ class RegisterPage extends StatelessWidget {
                       context: context,
                       builder: (context) => ConfirmDialog(
                           confirmText: '''Ha introducido el ID de Paciente $id.
-¿Desea continuar?''', confirmAction: () => appState.saveId(id)),
+¿Desea continuar?''', confirmAction: () => userData.login(id)),
                     ),
                   }
               },

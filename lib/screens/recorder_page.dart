@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/main.dart';
+import 'package:apneadiag/utilities/sound_recorder.dart';
 
 class RecorderPage extends StatelessWidget {
   const RecorderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<ApneadiagState>();
-    var isRecording = appState.isRecording;
+    var recorder = context.watch<SoundRecorder>();
+    var isRecording = recorder.isRecording;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleLarge!.copyWith(
@@ -35,9 +35,9 @@ class RecorderPage extends StatelessWidget {
                   onPressed: () {
                     if (kDebugMode) {
                       if (isRecording) {
-                        appState.stopRecorder();
+                        recorder.stop();
                       } else {
-                        appState.startRecorder();
+                        recorder.start();
                       }
                     }
                   },

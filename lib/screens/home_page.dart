@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/main.dart';
 import 'package:apneadiag/screens/recorder_page.dart';
 import 'package:apneadiag/screens/register_page.dart';
 import 'package:apneadiag/screens/settings_page.dart';
-
+import 'package:apneadiag/utilities/user_data.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -17,10 +16,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<ApneadiagState>();
-    var id = appState.id;
+    var userData = context.watch<UserData>();
+    var isLogged = userData.isLogged;
 
-    if (id.isEmpty) {
+    if (!isLogged) {
       return LayoutBuilder(builder: (context, constraints) {
         return Scaffold(
           body: Container(

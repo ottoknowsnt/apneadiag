@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/main.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:apneadiag/utilities/sound_recorder.dart';
+import 'package:apneadiag/utilities/user_data.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<ApneadiagState>();
-    var id = appState.id;
-    var lastRecording = appState.lastRecording;
+    var userData = context.watch<UserData>();
+    var recorder = context.watch<SoundRecorder>();
+    var id = userData.id;
+    var lastRecordingPath = recorder.lastRecordingPath;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleMedium!.copyWith(
@@ -43,15 +45,15 @@ class SettingsPage extends StatelessWidget {
           Text('Ruta de la última Grabación', style: styleTitle),
           TextButton.icon(
             onPressed: () {
-              Share.shareXFiles([XFile(lastRecording)]);
+              Share.shareXFiles([XFile(lastRecordingPath)]);
             },
             icon: const Icon(Icons.share),
-            label: Text(lastRecording, style: styleSubtitle),
+            label: Text(lastRecordingPath, style: styleSubtitle),
           ),
           const Divider(),
           TextButton.icon(
             onPressed: () {
-              appState.clean();
+              userData.logout();
             },
             icon: const Icon(Icons.delete),
             label: Text('Borrar Datos Paciente', style: styleTitle),
