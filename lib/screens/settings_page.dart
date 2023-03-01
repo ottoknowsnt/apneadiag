@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:apneadiag/main.dart';
-import 'package:open_file/open_file.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -43,9 +43,9 @@ class SettingsPage extends StatelessWidget {
           Text('Ruta de la última Grabación', style: styleTitle),
           TextButton.icon(
             onPressed: () {
-              OpenFile.open(lastRecording);
+              Share.shareXFiles([XFile(lastRecording)]);
             },
-            icon: const Icon(Icons.open_in_new),
+            icon: const Icon(Icons.share),
             label: Text(lastRecording, style: styleSubtitle),
           ),
           const Divider(),

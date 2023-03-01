@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apneadiag/screens/home_page.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:apneadiag/utilities/local_notifications.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,7 @@ void main() async {
   FlutterSoundRecorder? recorder = FlutterSoundRecorder();
   await Permission.microphone.request();
   await recorder.openRecorder();
+  await LocalNotifications.init();
 
   runApp(Apneadiag(
       id: id,
@@ -69,11 +71,17 @@ class ApneadiagState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('lastRecording', _lastRecording);
     await _recorder.startRecorder(toFile: _lastRecording, codec: _codec);
+    LocalNotifications.showNotification(
+        title: 'Grabación iniciada',
+        body: 'Grabación iniciada a las ${DateTime.now()}');
     notifyListeners();
   }
 
   Future stopRecorder() async {
     await _recorder.stopRecorder();
+    LocalNotifications.showNotification(
+        title: 'Grabación finalizada',
+        body: 'Grabación finalizada a las ${DateTime.now()}');
     notifyListeners();
   }
 
