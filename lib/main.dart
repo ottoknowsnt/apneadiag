@@ -4,6 +4,14 @@ import 'package:apneadiag/screens/home_page.dart';
 import 'package:apneadiag/utilities/local_notifications.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
 import 'package:apneadiag/utilities/user_data.dart';
+import 'package:apneadiag/utilities/alarm_manager.dart';
+
+void testNotification() {
+  LocalNotifications.showNotification(
+    title: 'Test notification',
+    body: 'This is a test notification',
+  );
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +20,18 @@ void main() async {
   await UserData.init();
   await SoundRecorder.init();
   await LocalNotifications.init();
-
+  await AlarmManager.init();
+  // Schedule a notification at 23:30 to remind the user of the recording
+  LocalNotifications.scheduleNotification(
+      title: 'Grabación programada',
+      body: 'Grabación programada para las 23:45',
+      scheduledDate: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 23, 30));
+  // Test AlarmManager
+  AlarmManager.scheduleAlarm(
+      id: 0,
+      scheduledTime: DateTime.now().add(const Duration(seconds: 5)),
+      callback: testNotification);
   runApp(const Apneadiag());
 }
 
