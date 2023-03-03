@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:apneadiag/utilities/local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:apneadiag/utilities/server_upload.dart';
 
 class SoundRecorder extends ChangeNotifier {
   static final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
@@ -36,6 +37,7 @@ class SoundRecorder extends ChangeNotifier {
     LocalNotifications.showNotification(
         title: 'Grabación finalizada',
         body: 'Grabación finalizada a las ${DateTime.now()}');
+    ServerUpload.uploadFile(filePath: _lastRecordingPath);
     notifyListeners();
   }
 
