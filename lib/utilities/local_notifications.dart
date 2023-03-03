@@ -1,6 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tzData;
+import 'package:timezone/data/latest.dart' as tz_data;
 
 class LocalNotifications {
   static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -39,7 +39,7 @@ class LocalNotifications {
       {required String title,
       required String body,
       required DateTime scheduledDate}) async {
-    tzData.initializeTimeZones();
+    tz_data.initializeTimeZones();
     final tz.TZDateTime scheduledDateTz =
         tz.TZDateTime.from(scheduledDate, tz.local);
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
