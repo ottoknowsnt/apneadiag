@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:apneadiag/utilities/local_notifications.dart';
 
 class ServerUpload {
   static Future<void> uploadFile(
@@ -14,6 +15,16 @@ class ServerUpload {
         filePath,
       ),
     );
-    await request.send();
+    final response = await request.send();
+
+    if (response.statusCode == 204) {
+      LocalNotifications.showNotification(
+          title: 'Subida de archivo',
+          body: 'Subida de archivo a las ${DateTime.now()}');
+    } else {
+      LocalNotifications.showNotification(
+          title: 'Error al subir archivo',
+          body: 'Error al subir archivo a las ${DateTime.now()}');
+    }
   }
 }
