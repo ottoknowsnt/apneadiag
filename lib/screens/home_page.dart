@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:apneadiag/screens/recorder_page.dart';
 import 'package:apneadiag/screens/register_page.dart';
 import 'package:apneadiag/screens/settings_page.dart';
-import 'package:apneadiag/utilities/user_data.dart';
+import 'package:apneadiag/utilities/app_data.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var userData = context.watch<UserData>();
+    var userData = context.watch<AppData>();
     var isLogged = userData.isLogged;
 
     if (!isLogged) {

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:apneadiag/widgets/confirm_dialog.dart';
-import 'package:apneadiag/utilities/user_data.dart';
+import 'package:apneadiag/utilities/app_data.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var userData = context.watch<UserData>();
+    var userData = context.watch<AppData>();
     String id = '';
 
     var theme = Theme.of(context);

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:apneadiag/screens/home_page.dart';
 import 'package:apneadiag/utilities/local_notifications.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
-import 'package:apneadiag/utilities/user_data.dart';
+import 'package:apneadiag/utilities/app_data.dart';
 import 'package:apneadiag/utilities/alarm_manager.dart';
 
 void testNotification() {
@@ -17,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Prepare everything before running the app
-  await UserData.init();
+  await AppData.init();
   await SoundRecorder.init();
   await LocalNotifications.init();
   await AlarmManager.init();
@@ -42,15 +42,8 @@ class Apneadiag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<UserData>(
-          create: (context) => UserData(),
-        ),
-        ChangeNotifierProvider<SoundRecorder>(
-          create: (context) => SoundRecorder(),
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (context) => AppData(),
       child: MaterialApp(
         title: 'Apneadiag',
         theme: ThemeData(

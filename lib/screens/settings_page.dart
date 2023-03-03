@@ -3,17 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
-import 'package:apneadiag/utilities/user_data.dart';
+import 'package:apneadiag/utilities/app_data.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var userData = context.watch<UserData>();
-    var recorder = context.watch<SoundRecorder>();
-    var id = userData.id;
-    var lastRecordingPath = recorder.lastRecordingPath;
+    var appData = context.watch<AppData>();
+    var id = appData.id;
+    var lastRecordingPath = appData.lastRecordingPath;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleMedium!.copyWith(
@@ -53,7 +52,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(),
           TextButton.icon(
             onPressed: () {
-              userData.logout();
+              appData.logout();
             },
             icon: const Icon(Icons.delete),
             label: Text('Borrar Datos Paciente', style: styleTitle),

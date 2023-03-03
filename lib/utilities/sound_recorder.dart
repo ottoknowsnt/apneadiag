@@ -1,52 +1,39 @@
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:apneadiag/utilities/local_notifications.dart';
-import 'package:flutter/material.dart';
 import 'package:apneadiag/utilities/server_upload.dart';
+import 'package:apneadiag/utilities/app_data.dart';
 
-class SoundRecorder extends ChangeNotifier {
+class SoundRecorder {
   static final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   static String _lastRecordingPath = '';
 
   static Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
-    _lastRecordingPath = prefs.getString('lastRecordingPath') ?? '';
     await Permission.microphone.request();
     await _recorder.openRecorder();
   }
 
-  Future<void> start() async {
+  static Future<void> start() async {
     final path = await getApplicationDocumentsDirectory();
     _lastRecordingPath =
         '${path.path}/${DateTime.now().millisecondsSinceEpoch}.wav';
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('lastRecordingPath', _lastRecordingPath);
+    await AppData().setIsRecording(true);
     await _recorder.startRecorder(
       toFile: _lastRecordingPath,
     );
     LocalNotifications.showNotification(
         title: 'Grabación iniciada',
         body: 'Grabación iniciada a las ${DateTime.now()}');
-    notifyListeners();
   }
 
-  Future<void> stop() async {
+  static Future<void> stop() async {
     await _recorder.stopRecorder();
+    await AppData().setIsRecording(false);
+    await AppData().setLastRecordingPath(_lastRecordingPath);
     LocalNotifications.showNotification(
         title: 'Grabación finalizada',
         body: 'Grabación finalizada a las ${DateTime.now()}');
     ServerUpload.uploadFile(filePath: _lastRecordingPath);
-    notifyListeners();
   }
-
-  @override
-  void dispose() {
-    _recorder.closeRecorder();
-    super.dispose();
-  }
-
-  bool get isRecording => _recorder.isRecording;
-  String get lastRecordingPath => _lastRecordingPath;
 }
