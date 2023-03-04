@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:apneadiag/utilities/local_notifications.dart';
+import 'package:apneadiag/utilities/app_data.dart';
 
 class ServerUpload {
   static Future<void> uploadFile(
@@ -15,7 +16,9 @@ class ServerUpload {
         filePath,
       ),
     );
+    AppData().setIsUploading(true);
     final response = await request.send();
+    AppData().setIsUploading(false);
 
     if (response.statusCode == 204) {
       LocalNotifications.showNotification(

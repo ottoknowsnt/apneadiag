@@ -28,10 +28,10 @@ void main() async {
       scheduledDate: DateTime(DateTime.now().year, DateTime.now().month,
           DateTime.now().day, 23, 30));
   // Test AlarmManager
-  AlarmManager.scheduleAlarm(
+/*   AlarmManager.scheduleAlarm(
       id: 0,
       scheduledTime: DateTime.now().add(const Duration(seconds: 5)),
-      callback: testNotification);
+      callback: testNotification); */
   runApp(const Apneadiag());
 }
 

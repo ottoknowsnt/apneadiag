@@ -11,6 +11,7 @@ class RecorderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appData = context.watch<AppData>();
     var isRecording = appData.isRecording;
+    var isUploading = appData.isUploading;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleLarge!.copyWith(
@@ -24,17 +25,26 @@ class RecorderPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(isRecording ? 'Grabación en curso' : 'Listo para grabar',
+          Text(
+              isUploading
+                  ? "Subida en curso"
+                  : isRecording
+                      ? 'Grabación en curso'
+                      : 'Listo para grabar',
               style: styleTitle),
           const SizedBox(height: 30),
           Card(
-              color: isRecording ? Colors.red : Colors.green,
+              color: isUploading
+                  ? Colors.orange
+                  : isRecording
+                      ? Colors.red
+                      : Colors.green,
               child: SizedBox(
                 width: 200,
                 height: 200,
                 child: TextButton(
                   onPressed: () {
-                    if (kDebugMode) {
+                    if (kDebugMode || !isUploading) {
                       if (isRecording) {
                         SoundRecorder.stop();
                       } else {
@@ -42,15 +52,22 @@ class RecorderPage extends StatelessWidget {
                       }
                     }
                   },
-                  child: Text(isRecording ? 'Grabando' : 'Listo',
+                  child: Text(
+                      isUploading
+                          ? 'Subiendo'
+                          : isRecording
+                              ? 'Grabando'
+                              : 'Listo',
                       style: styleButton),
                 ),
               )),
           const SizedBox(height: 30),
           Text(
-              isRecording
-                  ? 'La grabación finalizará a las 6:45'
-                  : 'La grabación empezará a las 23:45',
+              isUploading
+                  ? 'La subida finalizará pronto'
+                  : isRecording
+                      ? 'La grabación finalizará a las 6:45'
+                      : 'La grabación empezará a las 23:45',
               style: styleTitle),
         ],
       ),
