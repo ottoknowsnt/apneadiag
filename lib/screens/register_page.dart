@@ -9,7 +9,7 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userData = context.watch<AppData>();
+    var appData = context.watch<AppData>();
     String id = '';
 
     var theme = Theme.of(context);
@@ -61,7 +61,7 @@ class RegisterPage extends StatelessWidget {
                       context: context,
                       builder: (context) => ConfirmDialog(
                           confirmText: '''Ha introducido el ID de Paciente $id.
-¿Desea continuar?''', confirmAction: () => userData.login(id)),
+¿Desea continuar?''', confirmAction: () => appData.login(id)),
                     ),
                   }
               },

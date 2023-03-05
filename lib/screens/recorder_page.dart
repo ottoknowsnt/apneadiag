@@ -46,9 +46,9 @@ class RecorderPage extends StatelessWidget {
                   onPressed: () {
                     if (kDebugMode || !isUploading) {
                       if (isRecording) {
-                        SoundRecorder.stop();
+                        SoundRecorder.stop(appData);
                       } else {
-                        SoundRecorder.start();
+                        SoundRecorder.start(appData);
                       }
                     }
                   },

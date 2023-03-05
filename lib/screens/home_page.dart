@@ -17,8 +17,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var userData = context.watch<AppData>();
-    var isLogged = userData.isLogged;
+    var appData = context.watch<AppData>();
+    var isLogged = appData.isLogged;
 
     if (!isLogged) {
       return LayoutBuilder(builder: (context, constraints) {
