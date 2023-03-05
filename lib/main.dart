@@ -4,13 +4,25 @@ import 'package:apneadiag/screens/home_page.dart';
 import 'package:apneadiag/utilities/local_notifications.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
 import 'package:apneadiag/utilities/app_data.dart';
-import 'package:apneadiag/utilities/alarm_manager.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:flutter/foundation.dart';
 
-void testNotification() {
-  LocalNotifications.showNotification(
-    title: 'Test notification',
-    body: 'This is a test notification',
-  );
+@pragma('vm:entry-point')
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    switch (task) {
+      case 'testNotification':
+        LocalNotifications.showNotification(
+            title: 'Test notification', body: 'This is a test notification');
+        break;
+      case 'scheduledNotification':
+        LocalNotifications.showNotification(
+            title: 'Scheduled notification',
+            body: 'This is a scheduled notification');
+        break;
+    }
+    return Future.value(true);
+  });
 }
 
 void main() async {
@@ -20,7 +32,8 @@ void main() async {
   await AppData.init();
   await SoundRecorder.init();
   await LocalNotifications.init();
-  await AlarmManager.init();
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
+
   // Schedule a notification at 23:30 to remind the user of the recording
   LocalNotifications.scheduleNotification(
       title: 'Grabación programada',
@@ -28,10 +41,20 @@ void main() async {
       scheduledDate: DateTime(DateTime.now().year, DateTime.now().month,
           DateTime.now().day, 23, 30));
   // Test AlarmManager
-/*   AlarmManager.scheduleAlarm(
-      id: 0,
-      scheduledTime: DateTime.now().add(const Duration(seconds: 5)),
-      callback: testNotification); */
+  DateTime scheduledTime = DateTime(DateTime.now().year, DateTime.now().month,
+      DateTime.now().day, DateTime.now().hour, DateTime.now().minute + 1);
+  if (scheduledTime.isBefore(DateTime.now())) {
+    scheduledTime = scheduledTime.add(const Duration(days: 1));
+  }
+  Duration timeUntilScheduled = scheduledTime.difference(DateTime.now());
+  Workmanager().registerPeriodicTask('startRecording', 'startRecording',
+      initialDelay: timeUntilScheduled,
+      frequency: const Duration(days: 1),
+      constraints: Constraints(
+          networkType: NetworkType.connected,
+          requiresBatteryNotLow: true,
+          requiresCharging: true,
+          requiresStorageNotLow: true));
   runApp(const Apneadiag());
 }
 
