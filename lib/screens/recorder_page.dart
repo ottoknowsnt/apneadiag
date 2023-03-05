@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
 import 'package:apneadiag/utilities/app_data.dart';
+import 'package:apneadiag/utilities/server_upload.dart';
 
 class RecorderPage extends StatelessWidget {
   const RecorderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var appData = context.watch<AppData>();
-    var isRecording = appData.isRecording;
-    var isUploading = appData.isUploading;
+    var appData = Provider.of<AppData>(context);
+    var recorder = context.watch<SoundRecorder>();
+    var isRecording = recorder.isRecording;
+    var serverUpload = context.watch<ServerUpload>();
+    var isUploading = serverUpload.isUploading;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleLarge!.copyWith(
@@ -46,9 +49,9 @@ class RecorderPage extends StatelessWidget {
                   onPressed: () {
                     if (kDebugMode || !isUploading) {
                       if (isRecording) {
-                        SoundRecorder.stop(appData);
+                        recorder.stop(appData, serverUpload);
                       } else {
-                        SoundRecorder.start(appData);
+                        recorder.start();
                       }
                     }
                   },

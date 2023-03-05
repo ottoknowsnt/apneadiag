@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:apneadiag/utilities/local_notifications.dart';
-import 'package:apneadiag/utilities/app_data.dart';
 
-class ServerUpload {
-  static Future<void> uploadFile(
-      {required String filePath, required AppData appData}) async {
+class ServerUpload extends ChangeNotifier {
+  static bool _isUploading = false;
+
+  Future<void> uploadFile(
+      {required String filePath}) async {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
@@ -16,9 +18,11 @@ class ServerUpload {
         filePath,
       ),
     );
-    appData.setIsUploading(true);
+    _isUploading = true;
+    notifyListeners();
     final response = await request.send();
-    appData.setIsUploading(false);
+    _isUploading = false;
+    notifyListeners();
 
     if (response.statusCode == 204) {
       LocalNotifications.showNotification(
@@ -30,4 +34,6 @@ class ServerUpload {
           body: 'Error al subir archivo a las ${DateTime.now()}');
     }
   }
+
+  bool get isUploading => _isUploading;
 }

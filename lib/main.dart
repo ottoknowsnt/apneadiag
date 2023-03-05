@@ -6,6 +6,7 @@ import 'package:apneadiag/utilities/sound_recorder.dart';
 import 'package:apneadiag/utilities/app_data.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter/foundation.dart';
+import 'package:apneadiag/utilities/server_upload.dart';
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -65,8 +66,12 @@ class Apneadiag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AppData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SoundRecorder()),
+        ChangeNotifierProvider(create: (context) => AppData()),
+        ChangeNotifierProvider(create: (context) => ServerUpload()),
+      ],
       child: MaterialApp(
         title: 'Apneadiag',
         theme: ThemeData(

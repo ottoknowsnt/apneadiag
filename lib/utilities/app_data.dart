@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 class AppData extends ChangeNotifier {
   static String _id = '';
   static String _lastRecordingPath = '';
-  static bool _isRecording = false;
-  static bool _isUploading = false;
 
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
@@ -27,25 +25,9 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setIsRecording(bool isRecording) async {
-    _isRecording = isRecording;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isRecording', _isRecording);
-    notifyListeners();
-  }
-
-  Future<void> setIsUploading(bool isUploading) async {
-    _isUploading = isUploading;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isUploading', _isUploading);
-    notifyListeners();
-  }
-
   String get id => _id;
   bool get isLogged => _id.isNotEmpty;
   String get lastRecordingPath => _lastRecordingPath;
-  bool get isRecording => _isRecording;
-  bool get isUploading => _isUploading;
 
   Future<void> logout() async {
     _id = '';
