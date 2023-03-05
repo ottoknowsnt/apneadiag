@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +74,30 @@ class RecorderPage extends StatelessWidget {
                       ? 'La grabación finalizará a las 6:45'
                       : 'La grabación empezará a las 23:45',
               style: styleTitle),
+          const SizedBox(height: 30),
+          TextButton(
+            onPressed: () {
+              DateTime scheduledDate =
+                  DateTime.now().add(const Duration(minutes: 1));
+              if (scheduledDate.isBefore(DateTime.now())) {
+                scheduledDate = scheduledDate.add(const Duration(days: 1));
+              }
+              Duration timeUntilScheduled =
+                  scheduledDate.difference(DateTime.now());
+              Timer(timeUntilScheduled, () {
+                recorder.start();
+              });
+              scheduledDate = DateTime.now().add(const Duration(minutes: 2));
+              if (scheduledDate.isBefore(DateTime.now())) {
+                scheduledDate = scheduledDate.add(const Duration(days: 1));
+              }
+              timeUntilScheduled = scheduledDate.difference(DateTime.now());
+              Timer(timeUntilScheduled, () {
+                recorder.stop(appData, serverUpload);
+              });
+            },
+            child: const Text('Programar grabación'),
+          ),
         ],
       ),
     );
