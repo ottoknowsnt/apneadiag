@@ -4,7 +4,7 @@ import 'package:apneadiag/utilities/app_data.dart';
 
 class ServerUpload {
   static Future<void> uploadFile(
-      {required String filePath}) async {
+      {required String filePath, required AppData appData}) async {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
@@ -16,9 +16,9 @@ class ServerUpload {
         filePath,
       ),
     );
-    AppData().setIsUploading(true);
+    appData.setIsUploading(true);
     final response = await request.send();
-    AppData().setIsUploading(false);
+    appData.setIsUploading(false);
 
     if (response.statusCode == 204) {
       LocalNotifications.showNotification(

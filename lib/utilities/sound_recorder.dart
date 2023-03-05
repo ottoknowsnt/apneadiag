@@ -12,11 +12,11 @@ class SoundRecorder {
     await _recorder.hasPermission();
   }
 
-  static Future<void> start() async {
+  static Future<void> start(AppData appData) async {
     final path = await getApplicationDocumentsDirectory();
     _lastRecordingPath =
         '${path.path}/${DateTime.now().millisecondsSinceEpoch}.wav';
-    await AppData().setIsRecording(true);
+    await appData.setIsRecording(true);
     await _recorder.start(
       path: _lastRecordingPath,
       encoder: AudioEncoder.wav,
@@ -26,13 +26,13 @@ class SoundRecorder {
         body: 'Grabación iniciada a las ${DateTime.now()}');
   }
 
-  static Future<void> stop() async {
+  static Future<void> stop(AppData appData) async {
     await _recorder.stop();
-    await AppData().setIsRecording(false);
-    await AppData().setLastRecordingPath(_lastRecordingPath);
+    await appData.setIsRecording(false);
+    await appData.setLastRecordingPath(_lastRecordingPath);
     LocalNotifications.showNotification(
         title: 'Grabación finalizada',
         body: 'Grabación finalizada a las ${DateTime.now()}');
-    ServerUpload.uploadFile(filePath: _lastRecordingPath);
+    ServerUpload.uploadFile(filePath: _lastRecordingPath, appData: appData);
   }
 }
