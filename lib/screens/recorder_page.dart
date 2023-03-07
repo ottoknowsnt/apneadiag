@@ -10,7 +10,8 @@ class RecorderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appData = Provider.of<AppData>(context);
+    var appData = context.watch<AppData>();
+    var autoMode = appData.autoMode;
     var recorder = context.watch<SoundRecorder>();
     var isRecording = recorder.isRecording;
     var serverUpload = context.watch<ServerUpload>();
@@ -24,30 +25,55 @@ class RecorderPage extends StatelessWidget {
       color: Colors.white,
     );
 
+    bool canManualRecord = !(autoMode || isUploading);
+    String topText = '';
+    String buttonText = '';
+    Color buttonColor = isUploading
+        ? Colors.orange
+        : isRecording
+            ? Colors.red
+            : Colors.green;
+    String bottomText = '';
+    if (isUploading) {
+      topText = 'Subida en curso';
+      buttonText = 'Subiendo';
+      bottomText = 'La subida finalizará pronto';
+    } else if (autoMode) {
+      if (isRecording) {
+        topText = 'Grabación en curso';
+        buttonText = 'Grabando';
+        bottomText = 'La grabación finalizará a las 6:45';
+      } else {
+        topText = 'Listo para grabar';
+        buttonText = 'Listo';
+        bottomText = 'La grabación empezará a las 23:45';
+      }
+    } else {
+      if (isRecording) {
+        topText = 'Grabación en curso';
+        buttonText = 'Parar';
+        bottomText = 'Pulsa para parar';
+      } else {
+        topText = 'Listo para grabar';
+        buttonText = 'Grabar';
+        bottomText = 'Pulsa para empezar';
+      }
+    }
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-              isUploading
-                  ? "Subida en curso"
-                  : isRecording
-                      ? 'Grabación en curso'
-                      : 'Listo para grabar',
-              style: styleTitle),
+          Text(topText, style: styleTitle),
           const SizedBox(height: 30),
           Card(
-              color: isUploading
-                  ? Colors.orange
-                  : isRecording
-                      ? Colors.red
-                      : Colors.green,
+              color: buttonColor,
               child: SizedBox(
                 width: 200,
                 height: 200,
                 child: TextButton(
                   onPressed: () {
-                    if (kDebugMode || !isUploading) {
+                    if (canManualRecord) {
                       if (isRecording) {
                         recorder.stop(appData, serverUpload);
                       } else {
@@ -55,23 +81,11 @@ class RecorderPage extends StatelessWidget {
                       }
                     }
                   },
-                  child: Text(
-                      isUploading
-                          ? 'Subiendo'
-                          : isRecording
-                              ? 'Grabando'
-                              : 'Listo',
-                      style: styleButton),
+                  child: Text(buttonText, style: styleButton),
                 ),
               )),
           const SizedBox(height: 30),
-          Text(
-              isUploading
-                  ? 'La subida finalizará pronto'
-                  : isRecording
-                      ? 'La grabación finalizará a las 6:45'
-                      : 'La grabación empezará a las 23:45',
-              style: styleTitle),
+          Text(bottomText, style: styleTitle),
         ],
       ),
     );

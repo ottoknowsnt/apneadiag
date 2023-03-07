@@ -9,8 +9,7 @@ class TaskManager {
     return scheduledTime.difference(DateTime.now());
   }
 
-  // For allowing functions with parameters to be passed as tasks
-  // we need to use a wrapper function
+
   static void scheduleTask(
       {required DateTime scheduledTime, required Function() task}) {
     // We create a timer to run the first time the task is scheduled
