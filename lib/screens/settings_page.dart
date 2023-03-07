@@ -12,6 +12,9 @@ class SettingsPage extends StatelessWidget {
     var appData = context.watch<AppData>();
     var id = appData.id;
     var lastRecordingPath = appData.lastRecordingPath;
+    var autoMode = appData.autoMode;
+    var startScheduledTime = appData.startScheduledTime;
+    var stopScheduledTime = appData.stopScheduledTime;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleMedium!.copyWith(
@@ -25,6 +28,49 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Modo Automático', style: styleTitle),
+              Checkbox(
+                value: autoMode,
+                onChanged: (value) {
+                  appData.setAutoMode(value!);
+                },
+              ),
+            ],
+          ),
+          const Divider(),
+          TextButton.icon(
+            onPressed: () async {
+              var time = await showTimePicker(
+                context: context,
+                initialTime: startScheduledTime,
+              );
+              if (time != null) {
+                appData.setStartScheduledTime(time);
+              }
+            },
+            icon: const Icon(Icons.access_time),
+            label: Text('Inicio: ${startScheduledTime.format(context)}',
+                style: styleTitle),
+          ),
+          const Divider(),
+          TextButton.icon(
+            onPressed: () async {
+              var time = await showTimePicker(
+                context: context,
+                initialTime: stopScheduledTime,
+              );
+              if (time != null) {
+                appData.setStopScheduledTime(time);
+              }
+            },
+            icon: const Icon(Icons.access_time),
+            label: Text('Fin: ${stopScheduledTime.format(context)}',
+                style: styleTitle),
+          ),
           const Divider(),
           TextButton.icon(
             onPressed: () {
