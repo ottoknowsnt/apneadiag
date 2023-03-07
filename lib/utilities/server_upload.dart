@@ -24,14 +24,15 @@ class ServerUpload extends ChangeNotifier {
     _isUploading = false;
     notifyListeners();
 
+    var now = DateTime.now();
     if (response.statusCode == 204) {
       LocalNotifications.showNotification(
           title: 'Subida de archivo',
-          body: 'Subida de archivo a las ${DateTime.now()}');
+          body: 'Subida de archivo a las $now');
     } else {
       LocalNotifications.showNotification(
           title: 'Error al subir archivo',
-          body: 'Error al subir archivo a las ${DateTime.now()}');
+          body: 'Error al subir archivo a las $now');
     }
   }
 

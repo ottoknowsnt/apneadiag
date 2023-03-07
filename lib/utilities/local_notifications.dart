@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
@@ -38,10 +39,13 @@ class LocalNotifications {
   static Future<void> scheduleNotification(
       {required String title,
       required String body,
-      required DateTime scheduledDate}) async {
+      required TimeOfDay scheduledTime}) async {
+    var now = DateTime.now();
+    var scheduledDateTime = DateTime(now.year, now.month, now.day,
+        scheduledTime.hour, scheduledTime.minute);
     tz_data.initializeTimeZones();
     final tz.TZDateTime scheduledDateTz =
-        tz.TZDateTime.from(scheduledDate, tz.local);
+        tz.TZDateTime.from(scheduledDateTime, tz.local);
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',

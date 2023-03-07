@@ -14,12 +14,6 @@ void main() async {
   await SoundRecorder.init();
   await LocalNotifications.init();
 
-  // Schedule a notification at 23:30 to remind the user of the recording
-  LocalNotifications.scheduleNotification(
-      title: 'Grabación programada',
-      body: 'Grabación programada para las 23:45',
-      scheduledDate: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 23, 30));
   runApp(const Apneadiag());
 }
 

@@ -17,24 +17,26 @@ class SoundRecorder extends ChangeNotifier {
 
   Future<void> start() async {
     final path = await getApplicationDocumentsDirectory();
+    var now = DateTime.now();
     _lastRecordingPath =
-        '${path.path}/${DateTime.now().millisecondsSinceEpoch}.wav';
+        '${path.path}/${now.millisecondsSinceEpoch}.wav';
     await _recorder.startRecorder(
       toFile: _lastRecordingPath,
     );
     notifyListeners();
     LocalNotifications.showNotification(
         title: 'Grabación iniciada',
-        body: 'Grabación iniciada a las ${DateTime.now()}');
+        body: 'Grabación iniciada a las $now');
   }
 
   Future<void> stop(AppData appData, ServerUpload serverUpload) async {
     await _recorder.stopRecorder();
     notifyListeners();
     await appData.setLastRecordingPath(_lastRecordingPath);
+    var now = DateTime.now();
     LocalNotifications.showNotification(
         title: 'Grabación finalizada',
-        body: 'Grabación finalizada a las ${DateTime.now()}');
+        body: 'Grabación finalizada a las $now');
     await serverUpload.uploadFile(filePath: _lastRecordingPath);
   }
 

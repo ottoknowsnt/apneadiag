@@ -12,6 +12,8 @@ class RecorderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appData = context.watch<AppData>();
     var autoMode = appData.autoMode;
+    var startScheduledTime = appData.startScheduledTime;
+    var stopScheduledTime = appData.stopScheduledTime;
     var recorder = context.watch<SoundRecorder>();
     var isRecording = recorder.isRecording;
     var serverUpload = context.watch<ServerUpload>();
@@ -42,11 +44,13 @@ class RecorderPage extends StatelessWidget {
       if (isRecording) {
         topText = 'Grabación en curso';
         buttonText = 'Grabando';
-        bottomText = 'La grabación finalizará a las 6:45';
+        bottomText =
+            'La grabación finalizará a las ${stopScheduledTime.format(context)}';
       } else {
         topText = 'Listo para grabar';
         buttonText = 'Listo';
-        bottomText = 'La grabación empezará a las 23:45';
+        bottomText =
+            'La grabación empezará a las ${startScheduledTime.format(context)}';
       }
     } else {
       if (isRecording) {
