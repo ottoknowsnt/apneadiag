@@ -12,6 +12,7 @@ class SettingsPage extends StatelessWidget {
     var appData = context.watch<AppData>();
     var id = appData.id;
     var lastRecordingPath = appData.lastRecordingPath;
+    var autoMode = appData.autoMode;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleMedium!.copyWith(
@@ -25,6 +26,19 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Modo Automático', style: styleTitle),
+              Checkbox(
+                value: autoMode,
+                onChanged: (value) {
+                  appData.setAutoMode(value!);
+                },
+              ),
+            ],
+          ),
           const Divider(),
           TextButton.icon(
             onPressed: () {
