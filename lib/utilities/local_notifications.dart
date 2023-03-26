@@ -20,6 +20,37 @@ class LocalNotifications {
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
+  static Future<void> startForegroundService(
+      {required String title,
+      required String body,
+      Set<AndroidServiceForegroundType>? foregroundServiceTypes}) async {
+    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'apneadiag',
+      'Apneadiag',
+      channelDescription: 'Apneadiag Notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      ongoing: true,
+      autoCancel: false,
+    );
+
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.startForegroundService(1, title, body,
+            notificationDetails: androidPlatformChannelSpecifics,
+            payload: 'Apneadiag',
+            foregroundServiceTypes: foregroundServiceTypes);
+  }
+
+  static Future<void> stopForegroundService() async {
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.stopForegroundService();
+  }
+
   static Future<void> showNotification(
       {required String title, required String body}) async {
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -41,8 +72,8 @@ class LocalNotifications {
       required String body,
       required TimeOfDay scheduledTime}) async {
     var now = DateTime.now();
-    var scheduledDateTime = DateTime(now.year, now.month, now.day,
-        scheduledTime.hour, scheduledTime.minute);
+    var scheduledDateTime = DateTime(
+        now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
     tz_data.initializeTimeZones();
     final tz.TZDateTime scheduledDateTz =
         tz.TZDateTime.from(scheduledDateTime, tz.local);
