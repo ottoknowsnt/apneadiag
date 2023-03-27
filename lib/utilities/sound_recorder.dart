@@ -20,17 +20,17 @@ class SoundRecorder extends ChangeNotifier {
     final path = await getApplicationDocumentsDirectory();
     var now = DateTime.now();
     _lastRecordingPath = '${path.path}/${now.millisecondsSinceEpoch}.wav';
-    await _recorder.startRecorder(
-      toFile: _lastRecordingPath,
-    );
-    notifyListeners();
-    LocalNotifications.startForegroundService(
+    await LocalNotifications.startForegroundService(
       title: 'Grabación en curso',
       body: 'Grabación iniciada a las $now',
       foregroundServiceTypes: {
         AndroidServiceForegroundType.foregroundServiceTypeMicrophone
       },
     );
+    await _recorder.startRecorder(
+      toFile: _lastRecordingPath,
+    );
+    notifyListeners();
   }
 
   Future<void> stop(AppData appData, ServerUpload serverUpload) async {
@@ -38,8 +38,8 @@ class SoundRecorder extends ChangeNotifier {
     notifyListeners();
     await appData.setLastRecordingPath(_lastRecordingPath);
     var now = DateTime.now();
-    LocalNotifications.stopForegroundService();
-    LocalNotifications.showNotification(
+    await LocalNotifications.stopForegroundService();
+    await LocalNotifications.showNotification(
         title: 'Grabación finalizada', body: 'Grabación finalizada a las $now');
     await serverUpload.uploadFile(filePath: _lastRecordingPath);
   }

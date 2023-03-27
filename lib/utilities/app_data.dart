@@ -23,11 +23,11 @@ class AppData extends ChangeNotifier {
       _stopScheduledTime = TimeOfDay(
           hour: prefs.getInt('stopScheduledTimeHour') ?? 6,
           minute: prefs.getInt('stopScheduledTimeMinute') ?? 45);
-      scheduleRecording();
+      await scheduleRecording();
     }
   }
 
-  static void scheduleRecording() {
+  static Future<void> scheduleRecording() async {
     TaskManager.scheduleTask(
         scheduledTime: _startScheduledTime,
         task: () async {
@@ -39,9 +39,10 @@ class AppData extends ChangeNotifier {
           await SoundRecorder().stop(AppData(), ServerUpload());
         });
     // Schedule a notification to remind the user of the recording 15 minutes before it starts
-    LocalNotifications.scheduleNotification(
+    await LocalNotifications.scheduleNotification(
         title: 'Grabación programada',
-        body: 'Grabación programada para las $_startScheduledTime.hour:$_startScheduledTime.minute',
+        body:
+            'Grabación programada para las $_startScheduledTime.hour:$_startScheduledTime.minute',
         scheduledTime: TimeOfDay(
             hour: _startScheduledTime.hour,
             minute: _startScheduledTime.minute - 15));
@@ -66,7 +67,7 @@ class AppData extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('autoMode', _autoMode);
     if (_autoMode) {
-      scheduleRecording();
+      await scheduleRecording();
     } else {
       TaskManager.cancelAllTasks();
     }
@@ -80,7 +81,7 @@ class AppData extends ChangeNotifier {
     prefs.setInt('startScheduledTimeMinute', _startScheduledTime.minute);
     if (_autoMode) {
       TaskManager.cancelAllTasks();
-      scheduleRecording();
+      await scheduleRecording();
     }
     notifyListeners();
   }
@@ -92,7 +93,7 @@ class AppData extends ChangeNotifier {
     prefs.setInt('stopScheduledTimeMinute', _stopScheduledTime.minute);
     if (_autoMode) {
       TaskManager.cancelAllTasks();
-      scheduleRecording();
+      await scheduleRecording();
     }
     notifyListeners();
   }
