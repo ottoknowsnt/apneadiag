@@ -12,6 +12,7 @@ class SettingsPage extends StatelessWidget {
     var appData = context.watch<AppData>();
     var id = appData.id;
     var lastRecordingPath = appData.lastRecordingPath;
+    var lastRecordingPathShort = lastRecordingPath.split('/').last;
     var autoMode = appData.autoMode;
     var startScheduledTime = appData.startScheduledTime;
     var stopScheduledTime = appData.stopScheduledTime;
@@ -88,14 +89,14 @@ class SettingsPage extends StatelessWidget {
             label: Text('ID Paciente: $id', style: styleTitle),
           ),
           const Divider(),
-          Text('Ruta de la última Grabación', style: styleTitle),
+          Text('Nombre de la última Grabación', style: styleTitle),
           TextButton.icon(
             onPressed: () {
               Provider.of<ServerUpload>(context, listen: false)
                   .uploadFile(filePath: lastRecordingPath);
             },
             icon: const Icon(Icons.cloud_upload),
-            label: Text(lastRecordingPath, style: styleSubtitle),
+            label: Text(lastRecordingPathShort, style: styleSubtitle),
           ),
           const Divider(),
           TextButton.icon(
