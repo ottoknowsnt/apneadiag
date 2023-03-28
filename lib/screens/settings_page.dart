@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:apneadiag/utilities/app_data.dart';
+import 'package:apneadiag/utilities/server_upload.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -91,9 +91,10 @@ class SettingsPage extends StatelessWidget {
           Text('Ruta de la última Grabación', style: styleTitle),
           TextButton.icon(
             onPressed: () {
-              Share.shareXFiles([XFile(lastRecordingPath)]);
+              Provider.of<ServerUpload>(context, listen: false)
+                  .uploadFile(filePath: lastRecordingPath);
             },
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.cloud_upload),
             label: Text(lastRecordingPath, style: styleSubtitle),
           ),
           const Divider(),
