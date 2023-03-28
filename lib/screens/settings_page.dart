@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:apneadiag/utilities/app_data.dart';
 import 'package:apneadiag/utilities/server_upload.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -101,10 +102,10 @@ class SettingsPage extends StatelessWidget {
           const Divider(),
           TextButton.icon(
             onPressed: () {
-              appData.logout();
+              openAppSettings();
             },
-            icon: const Icon(Icons.delete),
-            label: Text('Borrar Datos Paciente', style: styleTitle),
+            icon: const Icon(Icons.settings),
+            label: Text('Borrar Datos Aplicación', style: styleTitle),
           ),
           const Divider(),
         ],
