@@ -13,10 +13,10 @@ class SoundRecorder extends ChangeNotifier {
 
   static Future<void> init() async {
     await Permission.microphone.request();
-    await _recorder.openRecorder();
   }
 
   Future<void> start() async {
+    await _recorder.openRecorder();
     final path = await getApplicationDocumentsDirectory();
     var now = DateTime.now();
     _lastRecordingPath = '${path.path}/${now.millisecondsSinceEpoch}.wav';
@@ -35,6 +35,7 @@ class SoundRecorder extends ChangeNotifier {
 
   Future<void> stop(AppData appData, ServerUpload serverUpload) async {
     await _recorder.stopRecorder();
+    await _recorder.closeRecorder();
     notifyListeners();
     await appData.setLastRecordingPath(_lastRecordingPath);
     var now = DateTime.now();
