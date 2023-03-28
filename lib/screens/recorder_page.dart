@@ -35,21 +35,29 @@ class RecorderPage extends StatelessWidget {
             ? Colors.red
             : Colors.green;
     String bottomText = '';
+    String alertText = '';
     if (isUploading) {
       topText = 'Subida en curso';
       buttonText = 'Subiendo';
       bottomText = 'La subida finalizará pronto';
+      alertText = '''No se puede interrumpir la subida.
+Por favor, espere a que termine.''';
     } else if (autoMode) {
       if (isRecording) {
         topText = 'Grabación en curso';
         buttonText = 'Grabando';
         bottomText =
             'La grabación finalizará a las ${stopScheduledTime.format(context)}';
+        alertText =
+            '''No se puede interrumpir manualmente la grabación automática.
+Por favor, espere a que termine.''';
       } else {
         topText = 'Listo para grabar';
         buttonText = 'Listo';
         bottomText =
             'La grabación empezará a las ${startScheduledTime.format(context)}';
+        alertText = '''No se puede iniciar manualmente la grabación automática.
+Por favor, espere a que empiece.''';
       }
     } else {
       if (isRecording) {
@@ -82,6 +90,23 @@ class RecorderPage extends StatelessWidget {
                       } else {
                         recorder.start();
                       }
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Alerta'),
+                              content: Text(alertText),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          });
                     }
                   },
                   child: Text(buttonText, style: styleButton),
