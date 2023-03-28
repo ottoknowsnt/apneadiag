@@ -1,4 +1,4 @@
-package com.example.apneadiag
+package com.apneadiag.apneadiag
 
 import io.flutter.embedding.android.FlutterActivity
 
