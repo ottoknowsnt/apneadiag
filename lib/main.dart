@@ -5,6 +5,7 @@ import 'package:apneadiag/utilities/local_notifications.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
 import 'package:apneadiag/utilities/app_data.dart';
 import 'package:apneadiag/utilities/server_upload.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +14,7 @@ void main() async {
   await AppData.init();
   await SoundRecorder.init();
   await LocalNotifications.init();
+  await Permission.ignoreBatteryOptimizations.request();
 
   runApp(const Apneadiag());
 }

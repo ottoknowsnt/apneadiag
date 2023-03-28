@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,15 +19,18 @@ class SoundRecorder extends ChangeNotifier {
   Future<void> start() async {
     final path = await getApplicationDocumentsDirectory();
     var now = DateTime.now();
-    _lastRecordingPath =
-        '${path.path}/${now.millisecondsSinceEpoch}.wav';
+    _lastRecordingPath = '${path.path}/${now.millisecondsSinceEpoch}.wav';
+    await LocalNotifications.startForegroundService(
+      title: 'Grabación en curso',
+      body: 'Grabación iniciada a las $now',
+      foregroundServiceTypes: {
+        AndroidServiceForegroundType.foregroundServiceTypeMicrophone
+      },
+    );
     await _recorder.startRecorder(
       toFile: _lastRecordingPath,
     );
     notifyListeners();
-    LocalNotifications.showNotification(
-        title: 'Grabación iniciada',
-        body: 'Grabación iniciada a las $now');
   }
 
   Future<void> stop(AppData appData, ServerUpload serverUpload) async {
@@ -34,9 +38,9 @@ class SoundRecorder extends ChangeNotifier {
     notifyListeners();
     await appData.setLastRecordingPath(_lastRecordingPath);
     var now = DateTime.now();
-    LocalNotifications.showNotification(
-        title: 'Grabación finalizada',
-        body: 'Grabación finalizada a las $now');
+    await LocalNotifications.stopForegroundService();
+    await LocalNotifications.showNotification(
+        title: 'Grabación finalizada', body: 'Grabación finalizada a las $now');
     await serverUpload.uploadFile(filePath: _lastRecordingPath);
   }
 

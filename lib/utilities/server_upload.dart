@@ -5,8 +5,7 @@ import 'package:apneadiag/utilities/local_notifications.dart';
 class ServerUpload extends ChangeNotifier {
   static bool _isUploading = false;
 
-  Future<void> uploadFile(
-      {required String filePath}) async {
+  Future<void> uploadFile({required String filePath}) async {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
@@ -26,11 +25,10 @@ class ServerUpload extends ChangeNotifier {
 
     var now = DateTime.now();
     if (response.statusCode == 204) {
-      LocalNotifications.showNotification(
-          title: 'Subida de archivo',
-          body: 'Subida de archivo a las $now');
+      await LocalNotifications.showNotification(
+          title: 'Subida de archivo', body: 'Subida de archivo a las $now');
     } else {
-      LocalNotifications.showNotification(
+      await LocalNotifications.showNotification(
           title: 'Error al subir archivo',
           body: 'Error al subir archivo a las $now');
     }
