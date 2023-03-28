@@ -42,36 +42,38 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
           const Divider(),
-          TextButton.icon(
-            onPressed: () async {
-              var time = await showTimePicker(
-                context: context,
-                initialTime: startScheduledTime,
-              );
-              if (time != null) {
-                appData.setStartScheduledTime(time);
-              }
-            },
-            icon: const Icon(Icons.access_time),
-            label: Text('Inicio: ${startScheduledTime.format(context)}',
-                style: styleTitle),
-          ),
-          const Divider(),
-          TextButton.icon(
-            onPressed: () async {
-              var time = await showTimePicker(
-                context: context,
-                initialTime: stopScheduledTime,
-              );
-              if (time != null) {
-                appData.setStopScheduledTime(time);
-              }
-            },
-            icon: const Icon(Icons.access_time),
-            label: Text('Fin: ${stopScheduledTime.format(context)}',
-                style: styleTitle),
-          ),
-          const Divider(),
+          if (autoMode) ...[
+            TextButton.icon(
+              onPressed: () async {
+                var time = await showTimePicker(
+                  context: context,
+                  initialTime: startScheduledTime,
+                );
+                if (time != null) {
+                  appData.setStartScheduledTime(time);
+                }
+              },
+              icon: const Icon(Icons.access_time),
+              label: Text('Inicio: ${startScheduledTime.format(context)}',
+                  style: styleTitle),
+            ),
+            const Divider(),
+            TextButton.icon(
+              onPressed: () async {
+                var time = await showTimePicker(
+                  context: context,
+                  initialTime: stopScheduledTime,
+                );
+                if (time != null) {
+                  appData.setStopScheduledTime(time);
+                }
+              },
+              icon: const Icon(Icons.access_time),
+              label: Text('Fin: ${stopScheduledTime.format(context)}',
+                  style: styleTitle),
+            ),
+            const Divider(),
+          ],
           TextButton.icon(
             onPressed: () {
               Clipboard.setData(ClipboardData(text: id)).then((value) {
