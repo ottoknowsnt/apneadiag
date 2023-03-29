@@ -95,4 +95,8 @@ class LocalNotifications {
         matchDateTimeComponents: DateTimeComponents.time,
         payload: 'Apneadiag');
   }
+
+  static Future<void> cancelAllNotifications() async {
+    await _flutterLocalNotificationsPlugin.cancelAll();
+  }
 }

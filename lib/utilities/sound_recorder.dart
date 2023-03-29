@@ -13,35 +13,41 @@ class SoundRecorder extends ChangeNotifier {
 
   static Future<void> init() async {
     await Permission.microphone.request();
-    await _recorder.openRecorder();
   }
 
   Future<void> start() async {
-    final path = await getApplicationDocumentsDirectory();
-    var now = DateTime.now();
-    _lastRecordingPath = '${path.path}/${now.millisecondsSinceEpoch}.wav';
-    await LocalNotifications.startForegroundService(
-      title: 'Grabación en curso',
-      body: 'Grabación iniciada a las $now',
-      foregroundServiceTypes: {
-        AndroidServiceForegroundType.foregroundServiceTypeMicrophone
-      },
-    );
-    await _recorder.startRecorder(
-      toFile: _lastRecordingPath,
-    );
-    notifyListeners();
+    if (!isRecording) {
+      await _recorder.openRecorder();
+      final path = await getApplicationDocumentsDirectory();
+      var now = DateTime.now();
+      _lastRecordingPath = '${path.path}/${now.millisecondsSinceEpoch}.wav';
+      await LocalNotifications.startForegroundService(
+        title: 'Grabación en curso',
+        body: 'Grabación iniciada a las $now',
+        foregroundServiceTypes: {
+          AndroidServiceForegroundType.foregroundServiceTypeMicrophone
+        },
+      );
+      await _recorder.startRecorder(
+        toFile: _lastRecordingPath,
+      );
+      notifyListeners();
+    }
   }
 
   Future<void> stop(AppData appData, ServerUpload serverUpload) async {
-    await _recorder.stopRecorder();
-    notifyListeners();
-    await appData.setLastRecordingPath(_lastRecordingPath);
-    var now = DateTime.now();
-    await LocalNotifications.stopForegroundService();
-    await LocalNotifications.showNotification(
-        title: 'Grabación finalizada', body: 'Grabación finalizada a las $now');
-    await serverUpload.uploadFile(filePath: _lastRecordingPath);
+    if (isRecording) {
+      await _recorder.stopRecorder();
+      await _recorder.closeRecorder();
+      notifyListeners();
+      await appData.setLastRecordingPath(_lastRecordingPath);
+      var now = DateTime.now();
+      await LocalNotifications.stopForegroundService();
+      await LocalNotifications.showNotification(
+          title: 'Grabación finalizada',
+          body: 'Grabación finalizada a las $now');
+      await serverUpload.uploadFile(filePath: _lastRecordingPath);
+    }
   }
 
   bool get isRecording => _recorder.isRecording;

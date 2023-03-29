@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:apneadiag/utilities/app_data.dart';
+import 'package:apneadiag/utilities/server_upload.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -12,6 +13,7 @@ class SettingsPage extends StatelessWidget {
     var appData = context.watch<AppData>();
     var id = appData.id;
     var lastRecordingPath = appData.lastRecordingPath;
+    var lastRecordingPathShort = lastRecordingPath.split('/').last;
     var autoMode = appData.autoMode;
     var startScheduledTime = appData.startScheduledTime;
     var stopScheduledTime = appData.stopScheduledTime;
@@ -42,36 +44,38 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
           const Divider(),
-          TextButton.icon(
-            onPressed: () async {
-              var time = await showTimePicker(
-                context: context,
-                initialTime: startScheduledTime,
-              );
-              if (time != null) {
-                appData.setStartScheduledTime(time);
-              }
-            },
-            icon: const Icon(Icons.access_time),
-            label: Text('Inicio: ${startScheduledTime.format(context)}',
-                style: styleTitle),
-          ),
-          const Divider(),
-          TextButton.icon(
-            onPressed: () async {
-              var time = await showTimePicker(
-                context: context,
-                initialTime: stopScheduledTime,
-              );
-              if (time != null) {
-                appData.setStopScheduledTime(time);
-              }
-            },
-            icon: const Icon(Icons.access_time),
-            label: Text('Fin: ${stopScheduledTime.format(context)}',
-                style: styleTitle),
-          ),
-          const Divider(),
+          if (autoMode) ...[
+            TextButton.icon(
+              onPressed: () async {
+                var time = await showTimePicker(
+                  context: context,
+                  initialTime: startScheduledTime,
+                );
+                if (time != null) {
+                  appData.setStartScheduledTime(time);
+                }
+              },
+              icon: const Icon(Icons.access_time),
+              label: Text('Inicio: ${startScheduledTime.format(context)}',
+                  style: styleTitle),
+            ),
+            const Divider(),
+            TextButton.icon(
+              onPressed: () async {
+                var time = await showTimePicker(
+                  context: context,
+                  initialTime: stopScheduledTime,
+                );
+                if (time != null) {
+                  appData.setStopScheduledTime(time);
+                }
+              },
+              icon: const Icon(Icons.access_time),
+              label: Text('Fin: ${stopScheduledTime.format(context)}',
+                  style: styleTitle),
+            ),
+            const Divider(),
+          ],
           TextButton.icon(
             onPressed: () {
               Clipboard.setData(ClipboardData(text: id)).then((value) {
@@ -86,21 +90,22 @@ class SettingsPage extends StatelessWidget {
             label: Text('ID Paciente: $id', style: styleTitle),
           ),
           const Divider(),
-          Text('Ruta de la última Grabación', style: styleTitle),
+          Text('Nombre de la última Grabación', style: styleTitle),
           TextButton.icon(
             onPressed: () {
-              Share.shareXFiles([XFile(lastRecordingPath)]);
+              Provider.of<ServerUpload>(context, listen: false)
+                  .uploadFile(filePath: lastRecordingPath);
             },
-            icon: const Icon(Icons.share),
-            label: Text(lastRecordingPath, style: styleSubtitle),
+            icon: const Icon(Icons.cloud_upload),
+            label: Text(lastRecordingPathShort, style: styleSubtitle),
           ),
           const Divider(),
           TextButton.icon(
             onPressed: () {
-              appData.logout();
+              openAppSettings();
             },
-            icon: const Icon(Icons.delete),
-            label: Text('Borrar Datos Paciente', style: styleTitle),
+            icon: const Icon(Icons.settings),
+            label: Text('Borrar Datos Aplicación', style: styleTitle),
           ),
           const Divider(),
         ],

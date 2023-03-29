@@ -16,6 +16,9 @@ class AppData extends ChangeNotifier {
     _id = prefs.getString('id') ?? '';
     _lastRecordingPath = prefs.getString('lastRecordingPath') ?? '';
     _autoMode = prefs.getBool('autoMode') ?? false;
+    // Start cleaning up the already scheduled notifications and tasks
+    LocalNotifications.cancelAllNotifications();
+    TaskManager.cancelAllTasks();
     if (_autoMode) {
       _startScheduledTime = TimeOfDay(
           hour: prefs.getInt('startScheduledTimeHour') ?? 23,
@@ -66,10 +69,11 @@ class AppData extends ChangeNotifier {
     _autoMode = autoMode;
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('autoMode', _autoMode);
+    // Start cleaning up the already scheduled notifications and tasks
+    LocalNotifications.cancelAllNotifications();
+    TaskManager.cancelAllTasks();
     if (_autoMode) {
       await scheduleRecording();
-    } else {
-      TaskManager.cancelAllTasks();
     }
     notifyListeners();
   }
@@ -79,8 +83,10 @@ class AppData extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('startScheduledTimeHour', _startScheduledTime.hour);
     prefs.setInt('startScheduledTimeMinute', _startScheduledTime.minute);
+    // Start cleaning up the already scheduled notifications and tasks
+    LocalNotifications.cancelAllNotifications();
+    TaskManager.cancelAllTasks();
     if (_autoMode) {
-      TaskManager.cancelAllTasks();
       await scheduleRecording();
     }
     notifyListeners();
@@ -91,8 +97,10 @@ class AppData extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('stopScheduledTimeHour', _stopScheduledTime.hour);
     prefs.setInt('stopScheduledTimeMinute', _stopScheduledTime.minute);
+    // Start cleaning up the already scheduled notifications and tasks
+    LocalNotifications.cancelAllNotifications();
+    TaskManager.cancelAllTasks();
     if (_autoMode) {
-      TaskManager.cancelAllTasks();
       await scheduleRecording();
     }
     notifyListeners();
@@ -104,20 +112,4 @@ class AppData extends ChangeNotifier {
   bool get autoMode => _autoMode;
   TimeOfDay get startScheduledTime => _startScheduledTime;
   TimeOfDay get stopScheduledTime => _stopScheduledTime;
-
-  Future<void> logout() async {
-    _id = '';
-    _lastRecordingPath = '';
-    _autoMode = false;
-    _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
-    _stopScheduledTime = const TimeOfDay(hour: 6, minute: 45);
-    TaskManager.cancelAllTasks();
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('id', _id);
-    prefs.setString('lastRecordingPath', _lastRecordingPath);
-    prefs.setBool('autoMode', _autoMode);
-    prefs.setInt('startScheduledTimeHour', _startScheduledTime.hour);
-    prefs.setInt('startScheduledTimeMinute', _startScheduledTime.minute);
-    notifyListeners();
-  }
 }
