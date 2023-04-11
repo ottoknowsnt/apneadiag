@@ -6,15 +6,15 @@ import 'package:apneadiag/utilities/sound_recorder.dart';
 import 'package:apneadiag/utilities/app_data.dart';
 import 'package:apneadiag/utilities/server_upload.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:apneadiag/utilities/permission_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Prepare everything before running the app
   await AppData.init();
-  await SoundRecorder.init();
   await LocalNotifications.init();
-  await Permission.ignoreBatteryOptimizations.request();
+  await PermissionManager.init();
 
   runApp(const Apneadiag());
 }
@@ -31,6 +31,7 @@ class Apneadiag extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SoundRecorder()),
         ChangeNotifierProvider(create: (context) => AppData()),
         ChangeNotifierProvider(create: (context) => ServerUpload()),
+        ChangeNotifierProvider(create: (context) => PermissionManager()),
       ],
       child: MaterialApp(
         title: 'Apneadiag',
