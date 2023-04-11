@@ -1,11 +1,9 @@
+import 'package:apneadiag/screens/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:apneadiag/screens/recorder_page.dart';
-import 'package:apneadiag/screens/register_page.dart';
 import 'package:apneadiag/screens/settings_page.dart';
 import 'package:apneadiag/utilities/app_data.dart';
-import 'package:apneadiag/screens/permissions_page.dart';
-import 'package:apneadiag/utilities/permission_manager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,28 +19,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var appData = context.watch<AppData>();
     var isLogged = appData.isLogged;
-    var permissionManager = context.watch<PermissionManager>();
-    var allPermissionsGranted = permissionManager.allPermissionsGranted;
 
-    if (!allPermissionsGranted) {
+    if (!isLogged) {
       return LayoutBuilder(builder: (context, constraints) {
-        return Scaffold(
-          body: Container(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            alignment: Alignment.center,
-            child: const PermissionsPage(),
-          ),
-        );
-      });
-    } else if (!isLogged) {
-      return LayoutBuilder(builder: (context, constraints) {
-        return Scaffold(
-          body: Container(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            alignment: Alignment.center,
-            child: const RegisterPage(),
-          ),
-        );
+        return const OnboardingPage();
       });
     } else {
       Widget page;

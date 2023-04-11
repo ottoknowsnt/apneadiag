@@ -13,6 +13,7 @@ class PermissionsPage extends StatelessWidget {
         permissionManager.notificationPermissionGranted;
     var ignoreBatteryOptimizationsGranted =
         permissionManager.ignoreBatteryOptimizationsGranted;
+    var allPermissionsGranted = permissionManager.allPermissionsGranted;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -44,6 +45,19 @@ class PermissionsPage extends StatelessWidget {
                     await permissionManager.requestIgnoreBatteryOptimizations();
                   },
             child: const Text('Desactivar optimización de batería'),
+          ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                allPermissionsGranted ? Icons.check : Icons.close,
+                color: allPermissionsGranted ? Colors.green : Colors.red,
+              ),
+              Text(allPermissionsGranted
+                  ? 'Todos los permisos concedidos, puede continuar'
+                  : 'Faltan permisos por conceder, no puede continuar'),
+            ],
           ),
         ],
       ),
