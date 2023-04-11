@@ -26,6 +26,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         alignment: Alignment.center,
         child: PageView(
           controller: pageController,
+          physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (index) {
             setState(() {
               currentIndex = index;
