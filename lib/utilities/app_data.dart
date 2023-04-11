@@ -11,10 +11,12 @@ class AppData extends ChangeNotifier {
   static bool _autoMode = false;
   static TimeOfDay _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
   static TimeOfDay _stopScheduledTime = const TimeOfDay(hour: 6, minute: 45);
+  static double _uploadSpeed = 0.00;
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _id = prefs.getString('id') ?? '';
     _lastRecordingPath = prefs.getString('lastRecordingPath') ?? '';
+    _uploadSpeed = prefs.getDouble('uploadSpeed') ?? 0.0;
     _autoMode = prefs.getBool('autoMode') ?? false;
     // Start cleaning up the already scheduled notifications and tasks
     LocalNotifications.cancelAllNotifications();
@@ -106,9 +108,17 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setUploadSpeed(double speed) async {
+    _uploadSpeed = speed;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('uploadSpeed', _uploadSpeed);
+    notifyListeners();
+  }
+
   String get id => _id;
   bool get isLogged => _id.isNotEmpty;
   String get lastRecordingPath => _lastRecordingPath;
+  double get uploadSpeed => _uploadSpeed;
   bool get autoMode => _autoMode;
   TimeOfDay get startScheduledTime => _startScheduledTime;
   TimeOfDay get stopScheduledTime => _stopScheduledTime;
