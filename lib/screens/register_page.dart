@@ -60,8 +60,9 @@ class RegisterPage extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) => ConfirmDialog(
-                          confirmText: '''Ha introducido el ID de Paciente $id.
-¿Desea continuar?''', confirmAction: () => appData.login(id)),
+                          confirmText:
+                              'Ha introducido el ID de Paciente $id.\n¿Desea continuar?',
+                          confirmAction: () => appData.login(id)),
                     ),
                   }
               },

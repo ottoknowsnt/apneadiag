@@ -79,8 +79,8 @@ class _RecorderPageState extends State<RecorderPage> {
       topText = 'Subida en curso';
       buttonText = 'Subiendo';
       bottomText = 'La subida finalizará pronto';
-      alertText = '''No se puede interrumpir la subida.
-Por favor, espere a que termine.''';
+      alertText =
+          'No se puede interrumpir la subida.\nPor favor, espere a que termine.';
     } else if (autoMode) {
       if (isRecording) {
         topText = 'Grabación en curso';
@@ -88,15 +88,14 @@ Por favor, espere a que termine.''';
         bottomText =
             'La grabación finalizará a las ${stopScheduledTime.format(context)}';
         alertText =
-            '''No se puede interrumpir manualmente la grabación automática.
-Por favor, espere a que termine.''';
+            'No se puede interrumpir manualmente la grabación automática.\nPor favor, espere a que termine.';
       } else {
         topText = 'Listo para grabar';
         buttonText = 'Listo';
         bottomText =
             'La grabación empezará a las ${startScheduledTime.format(context)}';
-        alertText = '''No se puede iniciar manualmente la grabación automática.
-Por favor, espere a que empiece.''';
+        alertText =
+            'No se puede iniciar manualmente la grabación automática.\nPor favor, espere a que empiece.';
       }
     } else {
       if (isRecording) {
