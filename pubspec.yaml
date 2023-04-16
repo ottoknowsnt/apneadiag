@@ -20,6 +20,7 @@ dependencies:
   http: ^0.13.5
   timezone: ^0.9.1
   flutter_launcher_icons: ^0.13.0
+  battery_plus: ^3.0.4
 
 dev_dependencies:
   flutter_test:
