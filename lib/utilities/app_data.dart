@@ -7,14 +7,19 @@ import 'package:apneadiag/utilities/local_notifications.dart';
 
 class AppData extends ChangeNotifier {
   static String _id = '';
+  static int _age = 0;
+  static double _weight = 0.0;
+  static int _height = 0;
   static String _lastRecordingPath = '';
   static bool _autoMode = false;
   static TimeOfDay _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
   static TimeOfDay _stopScheduledTime = const TimeOfDay(hour: 6, minute: 45);
+  static double _uploadSpeed = -1.00;
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _id = prefs.getString('id') ?? '';
     _lastRecordingPath = prefs.getString('lastRecordingPath') ?? '';
+    _uploadSpeed = prefs.getDouble('uploadSpeed') ?? -1.00;
     _autoMode = prefs.getBool('autoMode') ?? false;
     // Start cleaning up the already scheduled notifications and tasks
     LocalNotifications.cancelAllNotifications();
@@ -51,10 +56,16 @@ class AppData extends ChangeNotifier {
             minute: _startScheduledTime.minute - 15));
   }
 
-  Future<void> login(String id) async {
+  Future<void> login(String id, int age, double weight, int height) async {
     _id = id;
+    _age = age;
+    _weight = weight;
+    _height = height;
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('id', _id);
+    prefs.setInt('age', _age);
+    prefs.setDouble('weight', _weight);
+    prefs.setInt('height', _height);
     notifyListeners();
   }
 
@@ -106,9 +117,20 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setUploadSpeed(double speed) async {
+    _uploadSpeed = speed;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('uploadSpeed', _uploadSpeed);
+    notifyListeners();
+  }
+
   String get id => _id;
+  int get age => _age;
+  double get weight => _weight;
+  int get height => _height;
   bool get isLogged => _id.isNotEmpty;
   String get lastRecordingPath => _lastRecordingPath;
+  double get uploadSpeed => _uploadSpeed;
   bool get autoMode => _autoMode;
   TimeOfDay get startScheduledTime => _startScheduledTime;
   TimeOfDay get stopScheduledTime => _stopScheduledTime;

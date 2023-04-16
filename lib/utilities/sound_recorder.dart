@@ -11,10 +11,6 @@ class SoundRecorder extends ChangeNotifier {
   static final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   static String _lastRecordingPath = '';
 
-  static Future<void> init() async {
-    await Permission.microphone.request();
-  }
-
   Future<void> start() async {
     if (!isRecording) {
       await _recorder.openRecorder();
@@ -46,7 +42,7 @@ class SoundRecorder extends ChangeNotifier {
       await LocalNotifications.showNotification(
           title: 'Grabación finalizada',
           body: 'Grabación finalizada a las $now');
-      await serverUpload.uploadFile(filePath: _lastRecordingPath);
+      await serverUpload.uploadFile(filePath: _lastRecordingPath, appData: appData);
     }
   }
 

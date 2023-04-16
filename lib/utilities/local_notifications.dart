@@ -4,15 +4,10 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
 
 class LocalNotifications {
-  static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+  static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
-    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    _flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()!
-        .requestPermission();
     const initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const initializationSettings =

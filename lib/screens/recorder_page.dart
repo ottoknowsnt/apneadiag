@@ -1,16 +1,55 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
 import 'package:apneadiag/utilities/app_data.dart';
 import 'package:apneadiag/utilities/server_upload.dart';
+import 'package:battery_plus/battery_plus.dart';
 
-class RecorderPage extends StatelessWidget {
+class RecorderPage extends StatefulWidget {
   const RecorderPage({super.key});
+
+  @override
+  State<RecorderPage> createState() => _RecorderPageState();
+}
+
+class _RecorderPageState extends State<RecorderPage> {
+  final Battery _battery = Battery();
+
+  BatteryState? _batteryState;
+  StreamSubscription<BatteryState>? _batteryStateSubscription;
+  bool _isCharging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _battery.batteryState.then(_updateBatteryState);
+    _batteryStateSubscription =
+        _battery.onBatteryStateChanged.listen(_updateBatteryState);
+  }
+
+  void _updateBatteryState(BatteryState state) {
+    if (_batteryState == state) return;
+    setState(() {
+      _batteryState = state;
+      _isCharging = state == BatteryState.charging;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (_batteryStateSubscription != null) {
+      _batteryStateSubscription!.cancel();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var appData = context.watch<AppData>();
     var autoMode = appData.autoMode;
+    var uploadSpeed = appData.uploadSpeed;
     var startScheduledTime = appData.startScheduledTime;
     var stopScheduledTime = appData.stopScheduledTime;
     var recorder = context.watch<SoundRecorder>();
@@ -40,8 +79,8 @@ class RecorderPage extends StatelessWidget {
       topText = 'Subida en curso';
       buttonText = 'Subiendo';
       bottomText = 'La subida finalizará pronto';
-      alertText = '''No se puede interrumpir la subida.
-Por favor, espere a que termine.''';
+      alertText =
+          'No se puede interrumpir la subida.\nPor favor, espere a que termine.';
     } else if (autoMode) {
       if (isRecording) {
         topText = 'Grabación en curso';
@@ -49,15 +88,14 @@ Por favor, espere a que termine.''';
         bottomText =
             'La grabación finalizará a las ${stopScheduledTime.format(context)}';
         alertText =
-            '''No se puede interrumpir manualmente la grabación automática.
-Por favor, espere a que termine.''';
+            'No se puede interrumpir manualmente la grabación automática.\nPor favor, espere a que termine.';
       } else {
         topText = 'Listo para grabar';
         buttonText = 'Listo';
         bottomText =
             'La grabación empezará a las ${startScheduledTime.format(context)}';
-        alertText = '''No se puede iniciar manualmente la grabación automática.
-Por favor, espere a que empiece.''';
+        alertText =
+            'No se puede iniciar manualmente la grabación automática.\nPor favor, espere a que empiece.';
       }
     } else {
       if (isRecording) {
@@ -77,6 +115,32 @@ Por favor, espere a que empiece.''';
         children: [
           Text(topText, style: styleTitle),
           const SizedBox(height: 30),
+          if (_batteryState != null) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  _isCharging ? Icons.check : Icons.close,
+                  color: _isCharging ? Colors.green : Colors.red,
+                ),
+                Text(_isCharging ? 'Cargando' : 'No está cargando.')
+              ],
+            ),
+            const SizedBox(height: 30),
+          ],
+          if (uploadSpeed != -1.00) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.check,
+                  color: Colors.green,
+                ),
+                Text('Velocidad de subida: $uploadSpeed Mbps'),
+              ],
+            ),
+            const SizedBox(height: 30),
+          ],
           Card(
               color: buttonColor,
               child: SizedBox(
@@ -113,6 +177,21 @@ Por favor, espere a que empiece.''';
                 ),
               )),
           const SizedBox(height: 30),
+          if (_batteryState != null) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  _isCharging ? Icons.check : Icons.question_mark,
+                  color: _isCharging ? Colors.green : Colors.grey,
+                ),
+                Text(_isCharging
+                    ? 'Las condiciones son óptimas'
+                    : 'No podemos asegurar que las condiciones sean óptimas.\nPor favor compruebe los avisos que se muestran.'),
+              ],
+            ),
+            const SizedBox(height: 30),
+          ],
           Text(bottomText, style: styleTitle),
         ],
       ),

@@ -1,25 +1,31 @@
+import 'package:apneadiag/utilities/app_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:apneadiag/utilities/local_notifications.dart';
 
 class ServerUpload extends ChangeNotifier {
   static bool _isUploading = false;
 
-  Future<void> uploadFile({required String filePath}) async {
+  Future<void> uploadFile(
+      {required String filePath, required AppData appData}) async {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
       Uri.parse('http://192.168.68.100:8000/upload'),
     );
+    var file = await http.MultipartFile.fromPath('files', filePath);
+    double fileSize = double.parse(file.length.toString());
+    // Convert file size to MB
+    fileSize = fileSize / (1024 * 1024);
     request.files.add(
-      await http.MultipartFile.fromPath(
-        'files',
-        filePath,
-      ),
+      file,
     );
     _isUploading = true;
     notifyListeners();
+    Stopwatch stopwatch = Stopwatch()..start();
     final response = await request.send();
+    stopwatch.stop();
     _isUploading = false;
     notifyListeners();
 
@@ -32,6 +38,12 @@ class ServerUpload extends ChangeNotifier {
           title: 'Error al subir archivo',
           body: 'Error al subir archivo a las $now');
     }
+
+    // The upload speed is in Mbps
+    var speed = (8 * fileSize) / (stopwatch.elapsedMilliseconds / 1000);
+    // Only keep 2 decimal places
+    speed = double.parse(speed.toStringAsFixed(2));
+    appData.setUploadSpeed(speed);
   }
 
   bool get isUploading => _isUploading;
