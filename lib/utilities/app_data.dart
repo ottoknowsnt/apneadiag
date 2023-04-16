@@ -7,6 +7,9 @@ import 'package:apneadiag/utilities/local_notifications.dart';
 
 class AppData extends ChangeNotifier {
   static String _id = '';
+  static int _age = 0;
+  static double _weight = 0.0;
+  static int _height = 0;
   static String _lastRecordingPath = '';
   static bool _autoMode = false;
   static TimeOfDay _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
@@ -53,10 +56,16 @@ class AppData extends ChangeNotifier {
             minute: _startScheduledTime.minute - 15));
   }
 
-  Future<void> login(String id) async {
+  Future<void> login(String id, int age, double weight, int height) async {
     _id = id;
+    _age = age;
+    _weight = weight;
+    _height = height;
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('id', _id);
+    prefs.setInt('age', _age);
+    prefs.setDouble('weight', _weight);
+    prefs.setInt('height', _height);
     notifyListeners();
   }
 
@@ -116,6 +125,9 @@ class AppData extends ChangeNotifier {
   }
 
   String get id => _id;
+  int get age => _age;
+  double get weight => _weight;
+  int get height => _height;
   bool get isLogged => _id.isNotEmpty;
   String get lastRecordingPath => _lastRecordingPath;
   double get uploadSpeed => _uploadSpeed;

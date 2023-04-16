@@ -12,6 +12,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appData = context.watch<AppData>();
     var id = appData.id;
+    var age = appData.age;
+    var weight = appData.weight;
+    var height = appData.height;
     var lastRecordingPath = appData.lastRecordingPath;
     var lastRecordingPathShort = lastRecordingPath.split('/').last;
     var autoMode = appData.autoMode;
@@ -78,16 +81,21 @@ class SettingsPage extends StatelessWidget {
           ],
           TextButton.icon(
             onPressed: () {
-              Clipboard.setData(ClipboardData(text: id)).then((value) {
+              Clipboard.setData(ClipboardData(
+                      text:
+                          'ID Paciente: $id\nEdad: $age\nPeso: $weight\nAltura: $height'))
+                  .then((value) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('ID Copiado al Portapapeles'),
+                    content: Text('Datos copiados al portapapeles'),
                   ),
                 );
               });
             },
             icon: const Icon(Icons.copy),
-            label: Text('ID Paciente: $id', style: styleTitle),
+            label: Text(
+                'ID Paciente: $id\nEdad: $age\nPeso: $weight\nAltura: $height',
+                style: styleTitle),
           ),
           const Divider(),
           Text('Nombre de la última Grabación', style: styleTitle),
