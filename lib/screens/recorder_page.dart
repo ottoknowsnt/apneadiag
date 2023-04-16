@@ -11,6 +11,7 @@ class RecorderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appData = context.watch<AppData>();
     var autoMode = appData.autoMode;
+    var uploadSpeed = appData.uploadSpeed;
     var startScheduledTime = appData.startScheduledTime;
     var stopScheduledTime = appData.stopScheduledTime;
     var recorder = context.watch<SoundRecorder>();
@@ -75,6 +76,20 @@ Por favor, espere a que empiece.''';
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                uploadSpeed != -1.00 ? Icons.check : Icons.question_mark,
+                color: uploadSpeed != -1.00 ? Colors.green : Colors.grey,
+              ),
+              Text(uploadSpeed != -1.00
+                  ? 'Velocidad de subida: $uploadSpeed Mbps'
+                  : '''Velocidad de subida: desconocida.
+Debe realizar al menos una subida'''),
+            ],
+          ),
+          const SizedBox(height: 30),
           Text(topText, style: styleTitle),
           const SizedBox(height: 30),
           Card(

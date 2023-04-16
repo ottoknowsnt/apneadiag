@@ -7,21 +7,25 @@ import 'package:apneadiag/utilities/local_notifications.dart';
 class ServerUpload extends ChangeNotifier {
   static bool _isUploading = false;
 
-  Future<void> uploadFile({required String filePath}) async {
+  Future<void> uploadFile(
+      {required String filePath, required AppData appData}) async {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
       Uri.parse('http://192.168.68.100:8000/upload'),
     );
+    var file = await http.MultipartFile.fromPath('files', filePath);
+    double fileSize = double.parse(file.length.toString());
+    // Convert file size to MB
+    fileSize = fileSize / (1024 * 1024);
     request.files.add(
-      await http.MultipartFile.fromPath(
-        'files',
-        filePath,
-      ),
+      file,
     );
     _isUploading = true;
     notifyListeners();
+    Stopwatch stopwatch = Stopwatch()..start();
     final response = await request.send();
+    stopwatch.stop();
     _isUploading = false;
     notifyListeners();
 
@@ -34,30 +38,9 @@ class ServerUpload extends ChangeNotifier {
           title: 'Error al subir archivo',
           body: 'Error al subir archivo a las $now');
     }
-  }
 
-  Future<void> testUploadSpeed(AppData appData) async {
-    // Upload a 1MB file we have in the assets folder, measure the time it takes
-    // and calculate the upload speed
-    ByteData bytes = await rootBundle.load('assets/1MB.txt');
-    Uint8List bytesList =
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-    final request = http.MultipartRequest(
-      'POST',
-      // Change this to production server address
-      Uri.parse('http://192.168.68.100:8000/upload'),
-    );
-    request.files.add(
-      http.MultipartFile.fromBytes(
-        'files',
-        bytesList,
-      ),
-    );
-    Stopwatch stopwatch = Stopwatch()..start();
-    await request.send();
-    stopwatch.stop();
     // The upload speed is in Mbps
-    var speed = 8 / (stopwatch.elapsedMilliseconds / 1000);
+    var speed = (8 * fileSize) / (stopwatch.elapsedMilliseconds / 1000);
     // Only keep 2 decimal places
     speed = double.parse(speed.toStringAsFixed(2));
     appData.setUploadSpeed(speed);

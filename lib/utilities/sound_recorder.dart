@@ -42,7 +42,7 @@ class SoundRecorder extends ChangeNotifier {
       await LocalNotifications.showNotification(
           title: 'Grabación finalizada',
           body: 'Grabación finalizada a las $now');
-      await serverUpload.uploadFile(filePath: _lastRecordingPath);
+      await serverUpload.uploadFile(filePath: _lastRecordingPath, appData: appData);
     }
   }
 

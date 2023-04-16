@@ -94,7 +94,7 @@ class SettingsPage extends StatelessWidget {
           TextButton.icon(
             onPressed: () {
               Provider.of<ServerUpload>(context, listen: false)
-                  .uploadFile(filePath: lastRecordingPath);
+                  .uploadFile(filePath: lastRecordingPath, appData: appData);
             },
             icon: const Icon(Icons.cloud_upload),
             label: Text(lastRecordingPathShort, style: styleSubtitle),
