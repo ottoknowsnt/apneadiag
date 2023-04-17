@@ -1,4 +1,3 @@
-import 'package:apneadiag/utilities/server_upload.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:apneadiag/utilities/sound_recorder.dart';
@@ -15,9 +14,21 @@ class AppData extends ChangeNotifier {
   static TimeOfDay _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
   static TimeOfDay _stopScheduledTime = const TimeOfDay(hour: 6, minute: 45);
   static double _uploadSpeed = -1.00;
+
+  static final AppData _instance = AppData._internal();
+
+  factory AppData() {
+    return _instance;
+  }
+
+  AppData._internal();
+
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _id = prefs.getString('id') ?? '';
+    _age = prefs.getInt('age') ?? 0;
+    _weight = prefs.getDouble('weight') ?? 0.0;
+    _height = prefs.getInt('height') ?? 0;
     _lastRecordingPath = prefs.getString('lastRecordingPath') ?? '';
     _uploadSpeed = prefs.getDouble('uploadSpeed') ?? -1.00;
     _autoMode = prefs.getBool('autoMode') ?? false;
@@ -44,7 +55,7 @@ class AppData extends ChangeNotifier {
     TaskManager.scheduleTask(
         scheduledTime: _stopScheduledTime,
         task: () async {
-          await SoundRecorder().stop(AppData(), ServerUpload());
+          await SoundRecorder().stop();
         });
     // Schedule a notification to remind the user of the recording 15 minutes before it starts
     await LocalNotifications.scheduleNotification(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:apneadiag/utilities/local_notifications.dart';
 import 'package:apneadiag/utilities/server_upload.dart';
@@ -10,6 +9,14 @@ import 'package:apneadiag/utilities/app_data.dart';
 class SoundRecorder extends ChangeNotifier {
   static final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   static String _lastRecordingPath = '';
+
+  static final SoundRecorder _instance = SoundRecorder._internal();
+
+  factory SoundRecorder() {
+    return _instance;
+  }
+
+  SoundRecorder._internal();
 
   Future<void> start() async {
     if (!isRecording) {
@@ -31,18 +38,18 @@ class SoundRecorder extends ChangeNotifier {
     }
   }
 
-  Future<void> stop(AppData appData, ServerUpload serverUpload) async {
+  Future<void> stop() async {
     if (isRecording) {
       await _recorder.stopRecorder();
       await _recorder.closeRecorder();
       notifyListeners();
-      await appData.setLastRecordingPath(_lastRecordingPath);
+      await AppData().setLastRecordingPath(_lastRecordingPath);
       var now = DateTime.now();
       await LocalNotifications.stopForegroundService();
       await LocalNotifications.showNotification(
           title: 'Grabación finalizada',
           body: 'Grabación finalizada a las $now');
-      await serverUpload.uploadFile(filePath: _lastRecordingPath, appData: appData);
+      await ServerUpload().uploadFile(filePath: _lastRecordingPath);
     }
   }
 
