@@ -64,7 +64,17 @@ class AppData extends ChangeNotifier {
             'Grabación programada para las $_startScheduledTime.hour:$_startScheduledTime.minute',
         scheduledTime: TimeOfDay(
             hour: _startScheduledTime.hour,
-            minute: _startScheduledTime.minute - 15));
+            minute: _startScheduledTime.minute - 15),
+        fullScreenIntent: false);
+    // Schedule a notification to remind the user of the recording 1 minute before it starts
+    await LocalNotifications.scheduleNotification(
+        title: 'Grabación a punto de comenzar',
+        body:
+            'Por favor pulse esta notificación para que la grabación pueda comenzar correctamente.',
+        scheduledTime: TimeOfDay(
+            hour: _startScheduledTime.hour,
+            minute: _startScheduledTime.minute - 1),
+        fullScreenIntent: true);
   }
 
   Future<void> login(String id, int age, double weight, int height) async {

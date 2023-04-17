@@ -65,22 +65,24 @@ class LocalNotifications {
   static Future<void> scheduleNotification(
       {required String title,
       required String body,
-      required TimeOfDay scheduledTime}) async {
+      required TimeOfDay scheduledTime,
+      required bool fullScreenIntent}) async {
     var now = DateTime.now();
     var scheduledDateTime = DateTime(
         now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
     tz_data.initializeTimeZones();
     final tz.TZDateTime scheduledDateTz =
         tz.TZDateTime.from(scheduledDateTime, tz.local);
-    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
       channelDescription: 'Apneadiag Notifications',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: false,
+      fullScreenIntent: fullScreenIntent,
     );
-    const platformChannelSpecifics =
+    var platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await _flutterLocalNotificationsPlugin.zonedSchedule(
         0, title, body, scheduledDateTz, platformChannelSpecifics,
