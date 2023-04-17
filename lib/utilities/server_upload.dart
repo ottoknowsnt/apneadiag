@@ -1,6 +1,5 @@
 import 'package:apneadiag/utilities/app_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:apneadiag/utilities/local_notifications.dart';
 
