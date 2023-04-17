@@ -27,6 +27,9 @@ class AppData extends ChangeNotifier {
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _id = prefs.getString('id') ?? '';
+    _age = prefs.getInt('age') ?? 0;
+    _weight = prefs.getDouble('weight') ?? 0.0;
+    _height = prefs.getInt('height') ?? 0;
     _lastRecordingPath = prefs.getString('lastRecordingPath') ?? '';
     _uploadSpeed = prefs.getDouble('uploadSpeed') ?? -1.00;
     _autoMode = prefs.getBool('autoMode') ?? false;
