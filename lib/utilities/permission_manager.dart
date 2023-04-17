@@ -6,6 +6,14 @@ class PermissionManager extends ChangeNotifier {
   static bool _notificationPermissionGranted = false;
   static bool _ignoreBatteryOptimizationsGranted = false;
 
+  static final PermissionManager _instance = PermissionManager._internal();
+
+  factory PermissionManager() {
+    return _instance;
+  }
+
+  PermissionManager._internal();
+
   static Future<void> init() async {
     _micPermissionGranted = await Permission.microphone.isGranted;
     _notificationPermissionGranted = await Permission.notification.isGranted;

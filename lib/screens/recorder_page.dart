@@ -150,7 +150,7 @@ class _RecorderPageState extends State<RecorderPage> {
                   onPressed: () {
                     if (canManualRecord) {
                       if (isRecording) {
-                        recorder.stop(appData, serverUpload);
+                        recorder.stop();
                       } else {
                         recorder.start();
                       }

@@ -7,8 +7,16 @@ import 'package:apneadiag/utilities/local_notifications.dart';
 class ServerUpload extends ChangeNotifier {
   static bool _isUploading = false;
 
+  static final ServerUpload _instance = ServerUpload._internal();
+
+  factory ServerUpload() {
+    return _instance;
+  }
+
+  ServerUpload._internal();
+
   Future<void> uploadFile(
-      {required String filePath, required AppData appData}) async {
+      {required String filePath}) async {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
@@ -43,7 +51,7 @@ class ServerUpload extends ChangeNotifier {
     var speed = (8 * fileSize) / (stopwatch.elapsedMilliseconds / 1000);
     // Only keep 2 decimal places
     speed = double.parse(speed.toStringAsFixed(2));
-    appData.setUploadSpeed(speed);
+    AppData().setUploadSpeed(speed);
   }
 
   bool get isUploading => _isUploading;

@@ -15,6 +15,15 @@ class AppData extends ChangeNotifier {
   static TimeOfDay _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
   static TimeOfDay _stopScheduledTime = const TimeOfDay(hour: 6, minute: 45);
   static double _uploadSpeed = -1.00;
+
+  static final AppData _instance = AppData._internal();
+
+  factory AppData() {
+    return _instance;
+  }
+
+  AppData._internal();
+
   static Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _id = prefs.getString('id') ?? '';
@@ -44,7 +53,7 @@ class AppData extends ChangeNotifier {
     TaskManager.scheduleTask(
         scheduledTime: _stopScheduledTime,
         task: () async {
-          await SoundRecorder().stop(AppData(), ServerUpload());
+          await SoundRecorder().stop();
         });
     // Schedule a notification to remind the user of the recording 15 minutes before it starts
     await LocalNotifications.scheduleNotification(

@@ -11,6 +11,14 @@ class SoundRecorder extends ChangeNotifier {
   static final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   static String _lastRecordingPath = '';
 
+  static final SoundRecorder _instance = SoundRecorder._internal();
+
+  factory SoundRecorder() {
+    return _instance;
+  }
+
+  SoundRecorder._internal();
+
   Future<void> start() async {
     if (!isRecording) {
       await _recorder.openRecorder();
@@ -31,18 +39,18 @@ class SoundRecorder extends ChangeNotifier {
     }
   }
 
-  Future<void> stop(AppData appData, ServerUpload serverUpload) async {
+  Future<void> stop() async {
     if (isRecording) {
       await _recorder.stopRecorder();
       await _recorder.closeRecorder();
       notifyListeners();
-      await appData.setLastRecordingPath(_lastRecordingPath);
+      await AppData().setLastRecordingPath(_lastRecordingPath);
       var now = DateTime.now();
       await LocalNotifications.stopForegroundService();
       await LocalNotifications.showNotification(
           title: 'Grabación finalizada',
           body: 'Grabación finalizada a las $now');
-      await serverUpload.uploadFile(filePath: _lastRecordingPath, appData: appData);
+      await ServerUpload().uploadFile(filePath: _lastRecordingPath);
     }
   }
 
