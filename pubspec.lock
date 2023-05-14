@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: battery_plus
-      sha256: "99b3cd8180ceaae306e403f75076476ec86381aaeff5847a8c17967d2f5d419f"
+      sha256: c31666a1ad20daa11baaafc13e801ce4c94783de8248d7e93b899da55b0dd469
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.5"
+    version: "4.0.0"
   battery_plus_platform_interface:
     dependency: transitive
     description:
