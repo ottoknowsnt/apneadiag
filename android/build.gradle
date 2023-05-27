@@ -35,9 +35,10 @@ subprojects {
 
             def javaVersion = JavaVersion.VERSION_1_8
             android {
-                compileSdkVersion flutter.compileSdkVersion
+                def androidApiVersion = 33
+                compileSdkVersion androidApiVersion
                 defaultConfig {
-                    targetSdkVersion flutter.targetSdkVersion
+                    targetSdkVersion androidApiVersion
                 }
                 compileOptions {
                     sourceCompatibility javaVersion
@@ -49,7 +50,7 @@ subprojects {
                     }
                 }
                 println("Setting java version to ${javaVersion.toString()} which is $javaVersion")
-                println("Setting compileSdkVersion and targetSdkVersion to ${flutter.compileSdkVersion} and ${flutter.targetSdkVersion} respectively")
+                println("Setting compileSdkVersion and targetSdkVersion to $androidApiVersion")
             }
         }
 
