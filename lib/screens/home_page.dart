@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     var permissionManager = context.watch<PermissionManager>();
     var allPermissionsGranted = permissionManager.allPermissionsGranted;
 
-    if (!isLogged && !allPermissionsGranted) {
+    if (!isLogged) {
       return LayoutBuilder(builder: (context, constraints) {
         return const OnboardingPage();
       });
@@ -39,6 +39,9 @@ class _HomePageState extends State<HomePage> {
         );
       });
     } else {
+      // We have all permissions and the user is logged in
+      // We can start the recording service
+      AppData.scheduleRecording();
       Widget page;
       switch (selectedIndex) {
         case 0:

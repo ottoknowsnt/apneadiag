@@ -48,7 +48,6 @@ class _RecorderPageState extends State<RecorderPage> {
   @override
   Widget build(BuildContext context) {
     var appData = context.watch<AppData>();
-    var autoMode = appData.autoMode;
     var uploadSpeed = appData.uploadSpeed;
     var startScheduledTime = appData.startScheduledTime;
     var stopScheduledTime = appData.stopScheduledTime;
@@ -65,49 +64,26 @@ class _RecorderPageState extends State<RecorderPage> {
       color: Colors.white,
     );
 
-    bool canManualRecord = !(autoMode || isUploading);
-    String topText = '';
-    String buttonText = '';
+    String topText = isUploading
+        ? 'Subida en curso'
+        : isRecording
+            ? 'Grabación en curso'
+            : 'Listo para grabar';
+    String buttonText = isUploading
+        ? 'Subiendo'
+        : isRecording
+            ? 'Grabando'
+            : 'Listo';
     Color buttonColor = isUploading
         ? Colors.orange
         : isRecording
             ? Colors.red
             : Colors.green;
-    String bottomText = '';
-    String alertText = '';
-    if (isUploading) {
-      topText = 'Subida en curso';
-      buttonText = 'Subiendo';
-      bottomText = 'La subida finalizará pronto';
-      alertText =
-          'No se puede interrumpir la subida.\nPor favor, espere a que termine.';
-    } else if (autoMode) {
-      if (isRecording) {
-        topText = 'Grabación en curso';
-        buttonText = 'Grabando';
-        bottomText =
-            'La grabación finalizará a las ${stopScheduledTime.format(context)}';
-        alertText =
-            'No se puede interrumpir manualmente la grabación automática.\nPor favor, espere a que termine.';
-      } else {
-        topText = 'Listo para grabar';
-        buttonText = 'Listo';
-        bottomText =
-            'La grabación empezará a las ${startScheduledTime.format(context)}';
-        alertText =
-            'No se puede iniciar manualmente la grabación automática.\nPor favor, espere a que empiece.';
-      }
-    } else {
-      if (isRecording) {
-        topText = 'Grabación en curso';
-        buttonText = 'Parar';
-        bottomText = 'Pulsa para parar';
-      } else {
-        topText = 'Listo para grabar';
-        buttonText = 'Grabar';
-        bottomText = 'Pulsa para empezar';
-      }
-    }
+    String bottomText = isUploading
+        ? 'La subida finalizará pronto'
+        : isRecording
+            ? 'La grabación finalizará a las ${stopScheduledTime.format(context)}'
+            : 'La grabación empezará a las ${startScheduledTime.format(context)}';
 
     return Center(
       child: Column(
@@ -147,32 +123,7 @@ class _RecorderPageState extends State<RecorderPage> {
                 width: 200,
                 height: 200,
                 child: TextButton(
-                  onPressed: () {
-                    if (canManualRecord) {
-                      if (isRecording) {
-                        recorder.stop();
-                      } else {
-                        recorder.start();
-                      }
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Alerta'),
-                              content: Text(alertText),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          });
-                    }
-                  },
+                  onPressed: null,
                   child: Text(buttonText, style: styleButton),
                 ),
               )),

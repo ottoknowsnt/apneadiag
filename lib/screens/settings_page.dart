@@ -17,9 +17,7 @@ class SettingsPage extends StatelessWidget {
     var height = appData.height;
     var lastRecordingPath = appData.lastRecordingPath;
     var lastRecordingPathShort = lastRecordingPath.split('/').last;
-    var autoMode = appData.autoMode;
     var startScheduledTime = appData.startScheduledTime;
-    var stopScheduledTime = appData.stopScheduledTime;
 
     var theme = Theme.of(context);
     var styleTitle = theme.textTheme.titleMedium!.copyWith(
@@ -34,51 +32,21 @@ class SettingsPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Modo Automático', style: styleTitle),
-              Checkbox(
-                value: autoMode,
-                onChanged: (value) {
-                  appData.setAutoMode(value!);
-                },
-              ),
-            ],
+          TextButton.icon(
+            onPressed: () async {
+              var time = await showTimePicker(
+                context: context,
+                initialTime: startScheduledTime,
+              );
+              if (time != null) {
+                appData.setStartScheduledTime(time);
+              }
+            },
+            icon: const Icon(Icons.access_time),
+            label: Text('Inicio: ${startScheduledTime.format(context)}',
+                style: styleTitle),
           ),
           const Divider(),
-          if (autoMode) ...[
-            TextButton.icon(
-              onPressed: () async {
-                var time = await showTimePicker(
-                  context: context,
-                  initialTime: startScheduledTime,
-                );
-                if (time != null) {
-                  appData.setStartScheduledTime(time);
-                }
-              },
-              icon: const Icon(Icons.access_time),
-              label: Text('Inicio: ${startScheduledTime.format(context)}',
-                  style: styleTitle),
-            ),
-            const Divider(),
-            TextButton.icon(
-              onPressed: () async {
-                var time = await showTimePicker(
-                  context: context,
-                  initialTime: stopScheduledTime,
-                );
-                if (time != null) {
-                  appData.setStopScheduledTime(time);
-                }
-              },
-              icon: const Icon(Icons.access_time),
-              label: Text('Fin: ${stopScheduledTime.format(context)}',
-                  style: styleTitle),
-            ),
-            const Divider(),
-          ],
           TextButton.icon(
             onPressed: () {
               Clipboard.setData(ClipboardData(
