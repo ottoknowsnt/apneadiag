@@ -50,7 +50,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       curve: Curves.easeInOut,
                     );
                   },
-            child: const Text('Siguiente'),
+            child: const Text('Siguiente',
+                textAlign: TextAlign.center, softWrap: true),
           ),
         ),
       ),

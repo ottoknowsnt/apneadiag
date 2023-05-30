@@ -36,7 +36,7 @@ class ServerUpload extends ChangeNotifier {
       var now = DateTime.now();
       if (response.statusCode == 204) {
         await LocalNotifications.showNotification(
-            title: 'Subida de archivo',
+            title: 'Subida de archivo exitosa',
             body:
                 'Subida de archivo a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
       } else {

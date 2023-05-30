@@ -60,6 +60,9 @@ class _RecorderPageState extends State<RecorderPage> {
     var styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
+    var styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
+      color: theme.colorScheme.onPrimaryContainer,
+    );
     var styleButton = theme.textTheme.titleLarge!.copyWith(
       color: Colors.white,
     );
@@ -86,65 +89,96 @@ class _RecorderPageState extends State<RecorderPage> {
             : 'La grabación empezará a las ${startScheduledTime.format(context)}';
 
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(topText, style: styleTitle),
-          const SizedBox(height: 30),
-          if (_batteryState != null) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  _isCharging ? Icons.check : Icons.close,
-                  color: _isCharging ? Colors.green : Colors.red,
-                ),
-                Text(_isCharging ? 'Cargando' : 'No está cargando.')
-              ],
-            ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(topText,
+                style: styleTitle, textAlign: TextAlign.center, softWrap: true),
             const SizedBox(height: 30),
-          ],
-          if (uploadSpeed != -1.00) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.check,
-                  color: Colors.green,
-                ),
-                Text('Velocidad de subida: $uploadSpeed Mbps'),
-              ],
-            ),
+            if (_batteryState != null) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    _isCharging ? Icons.check : Icons.close,
+                    color: _isCharging ? Colors.green : Colors.red,
+                  ),
+                  Flexible(
+                    child: Text(
+                      _isCharging ? 'Cargando' : 'No está cargando.',
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      style: styleSubtitle,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+            ],
+            if (uploadSpeed != -1.00) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.check,
+                    color: Colors.green,
+                  ),
+                  Flexible(
+                      child: Text(
+                    'Velocidad de subida: $uploadSpeed Mbps',
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: styleSubtitle,
+                  )),
+                ],
+              ),
+              const SizedBox(height: 30),
+            ],
+            Card(
+                color: buttonColor,
+                child: SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: TextButton(
+                    onPressed: null,
+                    child: Text(buttonText,
+                        style: styleButton,
+                        textAlign: TextAlign.center,
+                        softWrap: true),
+                  ),
+                )),
             const SizedBox(height: 30),
-          ],
-          Card(
-              color: buttonColor,
-              child: SizedBox(
-                width: 200,
-                height: 200,
-                child: TextButton(
-                  onPressed: null,
-                  child: Text(buttonText, style: styleButton),
-                ),
-              )),
-          const SizedBox(height: 30),
-          if (_batteryState != null) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  _isCharging ? Icons.check : Icons.question_mark,
-                  color: _isCharging ? Colors.green : Colors.grey,
-                ),
-                Text(_isCharging
-                    ? 'Las condiciones son óptimas'
-                    : 'No podemos asegurar que las condiciones sean óptimas.\nPor favor compruebe los avisos que se muestran.'),
-              ],
+            if (_batteryState != null) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    _isCharging ? Icons.check : Icons.question_mark,
+                    color: _isCharging ? Colors.green : Colors.grey,
+                  ),
+                  Flexible(
+                    child: Text(
+                      _isCharging
+                          ? 'Las condiciones son óptimas'
+                          : 'No podemos asegurar unas condiciones óptimas.\nCompruebe los avisos en la parte superior de la pantalla.',
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      style: styleSubtitle,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+            ],
+            Text(
+              bottomText,
+              style: styleTitle,
+              textAlign: TextAlign.center,
+              softWrap: true,
             ),
-            const SizedBox(height: 30),
           ],
-          Text(bottomText, style: styleTitle),
-        ],
+        ),
       ),
     );
   }
