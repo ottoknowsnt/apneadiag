@@ -36,11 +36,14 @@ class ServerUpload extends ChangeNotifier {
       var now = DateTime.now();
       if (response.statusCode == 204) {
         await LocalNotifications.showNotification(
-            title: 'Subida de archivo', body: 'Subida de archivo a las $now');
+            title: 'Subida de archivo',
+            body:
+                'Subida de archivo a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
       } else {
         await LocalNotifications.showNotification(
             title: 'Error al subir archivo',
-            body: 'Error al subir archivo a las $now');
+            body:
+                'Error al subir archivo a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
       }
 
       // The upload speed is in Mbps
@@ -54,7 +57,8 @@ class ServerUpload extends ChangeNotifier {
       var now = DateTime.now();
       LocalNotifications.showNotification(
           title: 'Error al subir archivo',
-          body: 'Error al subir archivo a las $now');
+          body:
+              'Error al subir archivo a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
     }).whenComplete(() {
       _isUploading = false;
       notifyListeners();
