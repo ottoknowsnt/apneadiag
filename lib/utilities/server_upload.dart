@@ -14,8 +14,7 @@ class ServerUpload extends ChangeNotifier {
 
   ServerUpload._internal();
 
-  Future<void> uploadFile(
-      {required String filePath}) async {
+  Future<void> uploadFile({required String filePath}) async {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
@@ -31,26 +30,35 @@ class ServerUpload extends ChangeNotifier {
     _isUploading = true;
     notifyListeners();
     Stopwatch stopwatch = Stopwatch()..start();
-    final response = await request.send();
-    stopwatch.stop();
-    _isUploading = false;
-    notifyListeners();
+    request.send().timeout(const Duration(minutes: 3)).then((response) async {
+      stopwatch.stop();
 
-    var now = DateTime.now();
-    if (response.statusCode == 204) {
-      await LocalNotifications.showNotification(
-          title: 'Subida de archivo', body: 'Subida de archivo a las $now');
-    } else {
-      await LocalNotifications.showNotification(
+      var now = DateTime.now();
+      if (response.statusCode == 204) {
+        await LocalNotifications.showNotification(
+            title: 'Subida de archivo', body: 'Subida de archivo a las $now');
+      } else {
+        await LocalNotifications.showNotification(
+            title: 'Error al subir archivo',
+            body: 'Error al subir archivo a las $now');
+      }
+
+      // The upload speed is in Mbps
+      var speed = (8 * fileSize) / (stopwatch.elapsedMilliseconds / 1000);
+      // Only keep 2 decimal places
+      speed = double.parse(speed.toStringAsFixed(2));
+      AppData().setUploadSpeed(speed);
+    }).catchError((error) {
+      stopwatch.stop();
+
+      var now = DateTime.now();
+      LocalNotifications.showNotification(
           title: 'Error al subir archivo',
           body: 'Error al subir archivo a las $now');
-    }
-
-    // The upload speed is in Mbps
-    var speed = (8 * fileSize) / (stopwatch.elapsedMilliseconds / 1000);
-    // Only keep 2 decimal places
-    speed = double.parse(speed.toStringAsFixed(2));
-    AppData().setUploadSpeed(speed);
+    }).whenComplete(() {
+      _isUploading = false;
+      notifyListeners();
+    });
   }
 
   bool get isUploading => _isUploading;
