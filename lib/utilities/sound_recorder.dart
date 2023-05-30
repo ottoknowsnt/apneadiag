@@ -33,6 +33,9 @@ class SoundRecorder extends ChangeNotifier {
       );
       await _recorder.startRecorder(
         toFile: _lastRecordingPath,
+        codec: Codec.pcm16WAV, // PCM 16bit
+        sampleRate: 8000, // 8kHz
+        numChannels: 1, // mono
       );
       notifyListeners();
     }
