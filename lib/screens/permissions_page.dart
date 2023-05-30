@@ -14,11 +14,17 @@ class PermissionsPage extends StatelessWidget {
     var ignoreBatteryOptimizationsGranted =
         permissionManager.ignoreBatteryOptimizationsGranted;
     var allPermissionsGranted = permissionManager.allPermissionsGranted;
+
+    var theme = Theme.of(context);
+    var style = theme.textTheme.titleLarge!.copyWith(
+      color: theme.colorScheme.onPrimaryContainer,
+    );
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('Permisos'),
+          Text('Permisos', style: style),
           const SizedBox(height: 30),
           ElevatedButton(
             onPressed: micPermissionGranted
