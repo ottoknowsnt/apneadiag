@@ -30,7 +30,7 @@ class ServerUpload extends ChangeNotifier {
     _isUploading = true;
     notifyListeners();
     Stopwatch stopwatch = Stopwatch()..start();
-    request.send().timeout(const Duration(minutes: 3)).then((response) async {
+    request.send().timeout(const Duration(minutes: 10)).then((response) async {
       stopwatch.stop();
 
       var now = DateTime.now();
