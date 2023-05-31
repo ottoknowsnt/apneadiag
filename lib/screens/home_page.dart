@@ -34,7 +34,12 @@ class _HomePageState extends State<HomePage> {
           body: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
             alignment: Alignment.center,
-            child: const PermissionsPage(),
+            child: const SafeArea(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: PermissionsPage(),
+              ),
+            ),
           ),
         );
       });
@@ -77,7 +82,12 @@ class _HomePageState extends State<HomePage> {
           body: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
             alignment: Alignment.center,
-            child: page,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: page,
+              ),
+            ),
           ),
         );
       });
