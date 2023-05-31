@@ -22,28 +22,30 @@ class _RegisterPageState extends State<RegisterPage> {
     int height = 0;
 
     var theme = Theme.of(context);
-    var style = theme.textTheme.titleLarge!.copyWith(
+    var styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
+    return Center(
+      child: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Introduzca los datos del Paciente', style: style),
+              Text('Introduzca los datos del paciente',
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: styleTitle),
               const SizedBox(height: 10),
               TextFormField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'ID Paciente',
+                  labelText: 'ID',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'El ID del Paciente está vacío.';
+                    return 'El ID está vacío.';
                   }
                   return null;
                 },
@@ -57,11 +59,11 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Edad Paciente',
+                  labelText: 'Edad',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'La edad del Paciente está vacía.';
+                    return 'La edad está vacía.';
                   }
                   return null;
                 },
@@ -75,11 +77,11 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Peso Paciente (kg)',
+                  labelText: 'Peso (kg)',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'El peso del Paciente está vacío.';
+                    return 'El peso está vacío.';
                   }
                   return null;
                 },
@@ -103,11 +105,11 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Altura Paciente (cm)',
+                  labelText: 'Altura (cm)',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'La altura del Paciente está vacía.';
+                    return 'La altura está vacía.';
                   }
                   return null;
                 },
@@ -126,14 +128,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Confirmación'),
-                            content: const Text('¿Desea confirmar los datos?'),
+                            title: const Text('Confirmación',
+                                textAlign: TextAlign.left, softWrap: true),
+                            content: const Text('¿Desea confirmar los datos?',
+                                textAlign: TextAlign.left, softWrap: true),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text('Cancelar'),
+                                child: const Text('Cancelar',
+                                    textAlign: TextAlign.center,
+                                    softWrap: true),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -141,7 +147,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   appData.login(id, age, weight, height);
                                   Navigator.pop(context);
                                 },
-                                child: const Text('Confirmar'),
+                                child: const Text('Confirmar',
+                                    textAlign: TextAlign.center,
+                                    softWrap: true),
                               ),
                             ],
                           );
@@ -149,7 +157,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     },
                 },
-                child: const Text('Confirmar'),
+                child: const Text('Confirmar',
+                    textAlign: TextAlign.center, softWrap: true),
               ),
             ],
           ),

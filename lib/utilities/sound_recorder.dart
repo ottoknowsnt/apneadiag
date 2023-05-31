@@ -23,16 +23,21 @@ class SoundRecorder extends ChangeNotifier {
       await _recorder.openRecorder();
       final path = await getApplicationDocumentsDirectory();
       var now = DateTime.now();
-      _lastRecordingPath = '${path.path}/${now.millisecondsSinceEpoch}.wav';
+      var dateTimeString =
+          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}-${now.second.toString().padLeft(2, '0')}';
+      _lastRecordingPath = '${path.path}/recording_$dateTimeString.wav';
       await LocalNotifications.startForegroundService(
         title: 'Grabación en curso',
-        body: 'Grabación iniciada a las $now',
+        body: 'Grabación iniciada a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
         foregroundServiceTypes: {
           AndroidServiceForegroundType.foregroundServiceTypeMicrophone
         },
       );
       await _recorder.startRecorder(
         toFile: _lastRecordingPath,
+        codec: Codec.pcm16WAV, // PCM 16bit
+        sampleRate: 8000, // 8kHz
+        numChannels: 1, // mono
       );
       notifyListeners();
     }
@@ -48,7 +53,7 @@ class SoundRecorder extends ChangeNotifier {
       await LocalNotifications.stopForegroundService();
       await LocalNotifications.showNotification(
           title: 'Grabación finalizada',
-          body: 'Grabación finalizada a las $now');
+          body: 'Grabación finalizada a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
       await ServerUpload().uploadFile(filePath: _lastRecordingPath);
     }
   }

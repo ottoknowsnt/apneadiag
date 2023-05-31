@@ -1,0 +1,14 @@
+1. En las siguientes pantallas, conceda los permisos necesarios para el correcto funcionamiento de la aplicación e introduzca los datos del paciente.
+2. En la pantalla de ajustes, configure la hora de inicio de la grabación si prefiere que sea distinta a la preestablecida.
+3. Un minuto antes de la hora de inicio establecida, la aplicación se iniciará automáticamente para poder comenzar la grabación adecuadamente. *
+4. Una vez comenzada la grabación, puede apagar la pantalla del dispositivo.
+5. Cuando la grabación termine, esta se subirá automáticamente al servidor.
+Siempre puede consultar el estado de la grabación en la pantalla de la grabadora y a través de las notificaciones.
+
+* Debido a restricciones del sistema operativo, es posible que la aplicación no se inicie automáticamente en algunos dispositivos.
+En ese caso, la aplicación enviará una notificación, y esta se deberá pulsar para que la aplicación se inicie y la grabación pueda comenzar adecuadamente.
+Para que no haya problemas con la grabación, se recomienda lo siguiente:
+- No tener el modo molestar activado durante la grabación.
+- No tener configurado un tiempo de apagado de pantalla de menos de 2 minutos
+- Cargar el dispositivo durante de la grabación.
+- No usar el dispositivo durante la grabación.
