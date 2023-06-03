@@ -56,21 +56,34 @@ class AppData extends ChangeNotifier {
           await SoundRecorder().stop();
         });
     // Schedule a notification to remind the user of the recording 15 minutes before it starts
+    var subHour = 0;
+    if ((_startScheduledTime.minute - 15) < 0) {
+      subHour = 1;
+    } else {
+      subHour = 0;
+    }
     await LocalNotifications.scheduleNotification(
+        id: 0,
         title: 'Grabación programada',
         body:
             'Grabación programada para las ${_startScheduledTime.hour.toString().padLeft(2, '0')}:${_startScheduledTime.minute.toString().padLeft(2, '0')}',
         scheduledTime: TimeOfDay(
-            hour: _startScheduledTime.hour,
+            hour: _startScheduledTime.hour - subHour,
             minute: (_startScheduledTime.minute - 15) % 60),
         fullScreenIntent: false);
     // Schedule a notification to remind the user of the recording 1 minute before it starts
+    if ((_startScheduledTime.minute - 1) < 0) {
+      subHour = 1;
+    } else {
+      subHour = 0;
+    }
     await LocalNotifications.scheduleNotification(
+        id: 1,
         title: 'Grabación a punto de comenzar',
         body:
             'Pulse aquí si no se ha abierto la aplicación para comenzar la grabación',
         scheduledTime: TimeOfDay(
-            hour: _startScheduledTime.hour,
+            hour: _startScheduledTime.hour - subHour,
             minute: (_startScheduledTime.minute - 1) % 60),
         fullScreenIntent: true);
   }

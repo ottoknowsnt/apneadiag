@@ -4,8 +4,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
 
 class LocalNotifications {
-  static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin
+      _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
     const initializationSettingsAndroid =
@@ -16,7 +16,8 @@ class LocalNotifications {
   }
 
   static Future<void> startForegroundService(
-      {required String title,
+      {required int id,
+      required String title,
       required String body,
       Set<AndroidServiceForegroundType>? foregroundServiceTypes}) async {
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -33,7 +34,7 @@ class LocalNotifications {
     await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
-        ?.startForegroundService(1, title, body,
+        ?.startForegroundService(id, title, body,
             notificationDetails: androidPlatformChannelSpecifics,
             payload: 'Apneadiag',
             foregroundServiceTypes: foregroundServiceTypes);
@@ -47,7 +48,7 @@ class LocalNotifications {
   }
 
   static Future<void> showNotification(
-      {required String title, required String body}) async {
+      {required int id, required String title, required String body}) async {
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
@@ -59,11 +60,12 @@ class LocalNotifications {
     const platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await _flutterLocalNotificationsPlugin
-        .show(0, title, body, platformChannelSpecifics, payload: 'Apneadiag');
+        .show(id, title, body, platformChannelSpecifics, payload: 'Apneadiag');
   }
 
   static Future<void> scheduleNotification(
-      {required String title,
+      {required int id,
+      required String title,
       required String body,
       required TimeOfDay scheduledTime,
       required bool fullScreenIntent}) async {
@@ -85,7 +87,7 @@ class LocalNotifications {
     var platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await _flutterLocalNotificationsPlugin.zonedSchedule(
-        0, title, body, scheduledDateTz, platformChannelSpecifics,
+        id, title, body, scheduledDateTz, platformChannelSpecifics,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,

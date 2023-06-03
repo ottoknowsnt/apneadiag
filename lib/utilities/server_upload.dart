@@ -36,11 +36,13 @@ class ServerUpload extends ChangeNotifier {
       var now = DateTime.now();
       if (response.statusCode == 204) {
         await LocalNotifications.showNotification(
+            id: 4,
             title: 'Subida de archivo exitosa',
             body:
                 'Subida de archivo a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
       } else {
         await LocalNotifications.showNotification(
+            id: 4,
             title: 'Error al subir archivo',
             body:
                 'Error al subir archivo a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
@@ -56,6 +58,7 @@ class ServerUpload extends ChangeNotifier {
 
       var now = DateTime.now();
       LocalNotifications.showNotification(
+          id: 4,
           title: 'Error al subir archivo',
           body:
               'Error al subir archivo a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}');
