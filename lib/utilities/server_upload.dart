@@ -18,7 +18,7 @@ class ServerUpload extends ChangeNotifier {
     final request = http.MultipartRequest(
       'POST',
       // Change this to production server address
-      Uri.parse('http://192.168.68.100:8000/upload'),
+      Uri.parse('http://192.168.68.112:8000/upload'),
     );
     var file = await http.MultipartFile.fromPath('files', filePath);
     double fileSize = double.parse(file.length.toString());
