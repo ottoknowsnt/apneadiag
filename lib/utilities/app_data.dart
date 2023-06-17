@@ -1,29 +1,30 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:apneadiag/utilities/sound_recorder.dart';
-import 'package:apneadiag/utilities/task_manager.dart';
-import 'package:apneadiag/utilities/local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'local_notifications.dart';
+import 'sound_recorder.dart';
+import 'task_manager.dart';
 
 class AppData extends ChangeNotifier {
-  static String _id = '';
-  static int _age = 0;
-  static double _weight = 0.0;
-  static int _height = 0;
-  static String _lastRecordingPath = '';
-  static TimeOfDay _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
-  static TimeOfDay _stopScheduledTime = calculateStopScheduledTime();
-  static double _uploadSpeed = -1.00;
-
-  static final AppData _instance = AppData._internal();
 
   factory AppData() {
     return _instance;
   }
 
   AppData._internal();
+  static String _id = '';
+  static int _age = 0;
+  static double _weight = 0;
+  static int _height = 0;
+  static String _lastRecordingPath = '';
+  static TimeOfDay _startScheduledTime = const TimeOfDay(hour: 23, minute: 45);
+  static TimeOfDay _stopScheduledTime = calculateStopScheduledTime();
+  static double _uploadSpeed = -1;
+
+  static final AppData _instance = AppData._internal();
 
   static Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     _id = prefs.getString('id') ?? '';
     _age = prefs.getInt('age') ?? 0;
     _weight = prefs.getDouble('weight') ?? 0.0;
@@ -43,7 +44,7 @@ class AppData extends ChangeNotifier {
   }
 
   static Future<void> scheduleRecording() async {
-    LocalNotifications.cancelAllNotifications();
+    await LocalNotifications.cancelAllNotifications();
     TaskManager.cancelAllTasks();
     TaskManager.scheduleTask(
         scheduledTime: _startScheduledTime,
@@ -56,7 +57,7 @@ class AppData extends ChangeNotifier {
           await SoundRecorder().stop();
         });
     // Schedule a notification to remind the user of the recording 15 minutes before it starts
-    var subHour = 0;
+    int subHour = 0;
     if ((_startScheduledTime.minute - 15) < 0) {
       subHour = 1;
     } else {
@@ -93,35 +94,35 @@ class AppData extends ChangeNotifier {
     _age = age;
     _weight = weight;
     _height = height;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('id', _id);
-    prefs.setInt('age', _age);
-    prefs.setDouble('weight', _weight);
-    prefs.setInt('height', _height);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id', _id);
+    await prefs.setInt('age', _age);
+    await prefs.setDouble('weight', _weight);
+    await prefs.setInt('height', _height);
     notifyListeners();
   }
 
   Future<void> setLastRecordingPath(String path) async {
     _lastRecordingPath = path;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('lastRecordingPath', _lastRecordingPath);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('lastRecordingPath', _lastRecordingPath);
     notifyListeners();
   }
 
   Future<void> setStartScheduledTime(TimeOfDay time) async {
     _startScheduledTime = time;
     _stopScheduledTime = calculateStopScheduledTime();
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('startScheduledTimeHour', _startScheduledTime.hour);
-    prefs.setInt('startScheduledTimeMinute', _startScheduledTime.minute);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('startScheduledTimeHour', _startScheduledTime.hour);
+    await prefs.setInt('startScheduledTimeMinute', _startScheduledTime.minute);
     await scheduleRecording();
     notifyListeners();
   }
 
   Future<void> setUploadSpeed(double speed) async {
     _uploadSpeed = speed;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setDouble('uploadSpeed', _uploadSpeed);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('uploadSpeed', _uploadSpeed);
     notifyListeners();
   }
 
