@@ -20,7 +20,8 @@ class LocalNotifications {
       required String title,
       required String body,
       Set<AndroidServiceForegroundType>? foregroundServiceTypes}) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
       channelDescription: 'Apneadiag Notifications',
@@ -49,7 +50,8 @@ class LocalNotifications {
 
   static Future<void> showNotification(
       {required int id, required String title, required String body}) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
       channelDescription: 'Apneadiag Notifications',
@@ -75,7 +77,8 @@ class LocalNotifications {
     tz_data.initializeTimeZones();
     final tz.TZDateTime scheduledDateTz =
         tz.TZDateTime.from(scheduledDateTime, tz.local);
-    final AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
       channelDescription: 'Apneadiag Notifications',

@@ -10,7 +10,6 @@ import 'local_notifications.dart';
 import 'server_upload.dart';
 
 class SoundRecorder extends ChangeNotifier {
-
   factory SoundRecorder() {
     return _instance;
   }
@@ -35,7 +34,7 @@ class SoundRecorder extends ChangeNotifier {
         title: 'Grabación en curso',
         body:
             'Grabación iniciada a las ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
-        foregroundServiceTypes: {
+        foregroundServiceTypes: <AndroidServiceForegroundType>{
           AndroidServiceForegroundType.foregroundServiceTypeMicrophone
         },
       );

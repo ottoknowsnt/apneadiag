@@ -6,7 +6,6 @@ import 'sound_recorder.dart';
 import 'task_manager.dart';
 
 class AppData extends ChangeNotifier {
-
   factory AppData() {
     return _instance;
   }

@@ -95,14 +95,14 @@ class _RecorderPageState extends State<RecorderPage> {
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(topText,
                 style: styleTitle, textAlign: TextAlign.center, softWrap: true),
             const SizedBox(height: 30),
-            if (_batteryState != null) ...[
+            if (_batteryState != null) ...<Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   Icon(
                     _isCharging ? Icons.check : Icons.close,
                     color: _isCharging ? Colors.green : Colors.red,
@@ -119,10 +119,10 @@ class _RecorderPageState extends State<RecorderPage> {
               ),
               const SizedBox(height: 30),
             ],
-            if (uploadSpeed != -1.00) ...[
+            if (uploadSpeed != -1.00) ...<Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   const Icon(
                     Icons.check,
                     color: Colors.green,
@@ -152,10 +152,10 @@ class _RecorderPageState extends State<RecorderPage> {
                   ),
                 )),
             const SizedBox(height: 30),
-            if (_batteryState != null) ...[
+            if (_batteryState != null) ...<Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   Icon(
                     _isCharging ? Icons.check : Icons.question_mark,
                     color: _isCharging ? Colors.green : Colors.grey,
