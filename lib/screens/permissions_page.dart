@@ -49,6 +49,11 @@ class PermissionsPage extends StatelessWidget {
                 softWrap: true,
               ),
             ),
+            Text(
+                'Si se le presentan varias opciones, seleccione "Siempre" o "Mientras se usa la aplicación"',
+                textAlign: TextAlign.center,
+                softWrap: true,
+                style: styleSubtitle),
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: notificationPermissionGranted
@@ -70,6 +75,11 @@ class PermissionsPage extends StatelessWidget {
               child: const Text('Desactivar optimización de batería',
                   textAlign: TextAlign.center, softWrap: true),
             ),
+            Text(
+                'Si se le presentan varias opciones, seleccione "Sin restricciones"',
+                textAlign: TextAlign.center,
+                softWrap: true,
+                style: styleSubtitle),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
