@@ -25,7 +25,8 @@ class SoundRecorder extends ChangeNotifier {
       var now = DateTime.now();
       var dateTimeString =
           '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}-${now.minute.toString().padLeft(2, '0')}-${now.second.toString().padLeft(2, '0')}';
-      _lastRecordingPath = '${path.path}/recording_$dateTimeString.wav';
+      var id = AppData().id;
+      _lastRecordingPath = '${path.path}/${id}_recording_$dateTimeString.wav';
       await LocalNotifications.startForegroundService(
         id: 2,
         title: 'Grabación en curso',
