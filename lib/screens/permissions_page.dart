@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/utilities/permission_manager.dart';
+import '../utilities/permission_manager.dart';
 
 class PermissionsPage extends StatelessWidget {
   const PermissionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var permissionManager = context.watch<PermissionManager>();
-    var micPermissionGranted = permissionManager.micPermissionGranted;
-    var notificationPermissionGranted =
+    final PermissionManager permissionManager = context.watch<PermissionManager>();
+    final bool micPermissionGranted = permissionManager.micPermissionGranted;
+    final bool notificationPermissionGranted =
         permissionManager.notificationPermissionGranted;
-    var ignoreBatteryOptimizationsGranted =
+    final bool ignoreBatteryOptimizationsGranted =
         permissionManager.ignoreBatteryOptimizationsGranted;
-    var allPermissionsGranted = permissionManager.allPermissionsGranted;
+    final bool allPermissionsGranted = permissionManager.allPermissionsGranted;
 
-    var theme = Theme.of(context);
-    var styleTitle = theme.textTheme.titleLarge!.copyWith(
+    final ThemeData theme = Theme.of(context);
+    final TextStyle styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
-    var styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
+    final TextStyle styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
 

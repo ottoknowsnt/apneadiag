@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class TaskManager {
   static List<Timer> _timers = [];
   static Duration calculateInitialDelay(TimeOfDay scheduledTime) {
-    var now = DateTime.now();
-    var scheduledDateTime = DateTime(now.year, now.month,
+    final DateTime now = DateTime.now();
+    DateTime scheduledDateTime = DateTime(now.year, now.month,
         now.day, scheduledTime.hour, scheduledTime.minute);
     if (scheduledDateTime.isBefore(now)) {
       scheduledDateTime = scheduledDateTime.add(const Duration(days: 1));
@@ -15,7 +15,7 @@ class TaskManager {
   }
 
   static void scheduleTask(
-      {required TimeOfDay scheduledTime, required Function() task}) {
+      {required TimeOfDay scheduledTime, required void Function() task}) {
     // We create a timer to run the first time the task is scheduled
     // and another timer to run the task periodically
     _timers.add(Timer(
@@ -23,12 +23,12 @@ class TaskManager {
         () => {
               task(),
               _timers.add(
-                  Timer.periodic(const Duration(days: 1), (timer) => task()))
+                  Timer.periodic(const Duration(days: 1), (Timer timer) => task()))
             }));
   }
 
   static void cancelAllTasks() {
-    for (var timer in _timers) {
+    for (final Timer timer in _timers) {
       timer.cancel();
     }
     _timers = [];

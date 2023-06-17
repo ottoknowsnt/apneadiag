@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
-    const initializationSettingsAndroid =
+    const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    const initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
@@ -20,7 +20,7 @@ class LocalNotifications {
       required String title,
       required String body,
       Set<AndroidServiceForegroundType>? foregroundServiceTypes}) async {
-    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
       channelDescription: 'Apneadiag Notifications',
@@ -49,7 +49,7 @@ class LocalNotifications {
 
   static Future<void> showNotification(
       {required int id, required String title, required String body}) async {
-    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
       channelDescription: 'Apneadiag Notifications',
@@ -57,7 +57,7 @@ class LocalNotifications {
       priority: Priority.high,
       showWhen: false,
     );
-    const platformChannelSpecifics =
+    const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await _flutterLocalNotificationsPlugin
         .show(id, title, body, platformChannelSpecifics, payload: 'Apneadiag');
@@ -69,13 +69,13 @@ class LocalNotifications {
       required String body,
       required TimeOfDay scheduledTime,
       required bool fullScreenIntent}) async {
-    var now = DateTime.now();
-    var scheduledDateTime = DateTime(
+    final DateTime now = DateTime.now();
+    final DateTime scheduledDateTime = DateTime(
         now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
     tz_data.initializeTimeZones();
     final tz.TZDateTime scheduledDateTz =
         tz.TZDateTime.from(scheduledDateTime, tz.local);
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    final AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'apneadiag',
       'Apneadiag',
       channelDescription: 'Apneadiag Notifications',
@@ -84,7 +84,7 @@ class LocalNotifications {
       showWhen: false,
       fullScreenIntent: fullScreenIntent,
     );
-    var platformChannelSpecifics =
+    final NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await _flutterLocalNotificationsPlugin.zonedSchedule(
         id, title, body, scheduledDateTz, platformChannelSpecifics,

@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:apneadiag/utilities/app_data.dart';
-import 'package:apneadiag/utilities/server_upload.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+import '../utilities/app_data.dart';
+import '../utilities/server_upload.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var appData = context.watch<AppData>();
-    var id = appData.id;
-    var age = appData.age;
-    var weight = appData.weight;
-    var height = appData.height;
-    var lastRecordingPath = appData.lastRecordingPath;
-    var lastRecordingPathShort = lastRecordingPath.split('/').last;
-    var startScheduledTime = appData.startScheduledTime;
-    var stopScheduledTime = appData.stopScheduledTime;
+    final AppData appData = context.watch<AppData>();
+    final String id = appData.id;
+    final int age = appData.age;
+    final double weight = appData.weight;
+    final int height = appData.height;
+    final String lastRecordingPath = appData.lastRecordingPath;
+    final String lastRecordingPathShort = lastRecordingPath.split('/').last;
+    final TimeOfDay startScheduledTime = appData.startScheduledTime;
+    final TimeOfDay stopScheduledTime = appData.stopScheduledTime;
 
-    var theme = Theme.of(context);
-    var styleTitle = theme.textTheme.titleLarge!.copyWith(
+    final ThemeData theme = Theme.of(context);
+    final TextStyle styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
-    var style = theme.textTheme.titleMedium!.copyWith(
+    final TextStyle style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
-    var styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
+    final TextStyle styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
 
-    var data = 'ID: $id\nEdad: $age\nPeso: $weight\nAltura: $height';
+    final String data = 'ID: $id\nEdad: $age\nPeso: $weight\nAltura: $height';
 
     return Center(
       child: SingleChildScrollView(
@@ -44,12 +45,12 @@ class SettingsPage extends StatelessWidget {
             const Divider(),
             TextButton.icon(
               onPressed: () async {
-                var time = await showTimePicker(
+                final TimeOfDay? time = await showTimePicker(
                   context: context,
                   initialTime: startScheduledTime,
                 );
                 if (time != null) {
-                  appData.setStartScheduledTime(time);
+                  await appData.setStartScheduledTime(time);
                 }
               },
               icon: const Icon(Icons.access_time),
@@ -68,7 +69,7 @@ class SettingsPage extends StatelessWidget {
                 style: style, textAlign: TextAlign.center, softWrap: true),
             TextButton.icon(
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: data)).then((value) {
+                Clipboard.setData(ClipboardData(text: data)).then((void value) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Datos copiados al portapapeles',
@@ -101,9 +102,7 @@ class SettingsPage extends StatelessWidget {
               const Divider(),
             ],
             TextButton.icon(
-              onPressed: () {
-                openAppSettings();
-              },
+              onPressed: openAppSettings,
               icon: const Icon(Icons.settings),
               label: Text('Borrar datos de la aplicación',
                   style: style, textAlign: TextAlign.center, softWrap: true),

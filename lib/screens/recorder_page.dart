@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/utilities/sound_recorder.dart';
-import 'package:apneadiag/utilities/app_data.dart';
-import 'package:apneadiag/utilities/server_upload.dart';
-import 'package:battery_plus/battery_plus.dart';
+
+import '../utilities/app_data.dart';
+import '../utilities/server_upload.dart';
+import '../utilities/sound_recorder.dart';
 
 class RecorderPage extends StatefulWidget {
   const RecorderPage({super.key});
@@ -30,7 +31,9 @@ class _RecorderPageState extends State<RecorderPage> {
   }
 
   void _updateBatteryState(BatteryState state) {
-    if (_batteryState == state) return;
+    if (_batteryState == state) {
+      return;
+    }
     setState(() {
       _batteryState = state;
       _isCharging = state == BatteryState.charging;
@@ -47,42 +50,42 @@ class _RecorderPageState extends State<RecorderPage> {
 
   @override
   Widget build(BuildContext context) {
-    var appData = context.watch<AppData>();
-    var uploadSpeed = appData.uploadSpeed;
-    var startScheduledTime = appData.startScheduledTime;
-    var stopScheduledTime = appData.stopScheduledTime;
-    var recorder = context.watch<SoundRecorder>();
-    var isRecording = recorder.isRecording;
-    var serverUpload = context.watch<ServerUpload>();
-    var isUploading = serverUpload.isUploading;
+    final AppData appData = context.watch<AppData>();
+    final double uploadSpeed = appData.uploadSpeed;
+    final TimeOfDay startScheduledTime = appData.startScheduledTime;
+    final TimeOfDay stopScheduledTime = appData.stopScheduledTime;
+    final SoundRecorder recorder = context.watch<SoundRecorder>();
+    final bool isRecording = recorder.isRecording;
+    final ServerUpload serverUpload = context.watch<ServerUpload>();
+    final bool isUploading = serverUpload.isUploading;
 
-    var theme = Theme.of(context);
-    var styleTitle = theme.textTheme.titleLarge!.copyWith(
+    final ThemeData theme = Theme.of(context);
+    final TextStyle styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
-    var styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
+    final TextStyle styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
-    var styleButton = theme.textTheme.titleLarge!.copyWith(
+    final TextStyle styleButton = theme.textTheme.titleLarge!.copyWith(
       color: Colors.white,
     );
 
-    String topText = isUploading
+    final String topText = isUploading
         ? 'Subida en curso'
         : isRecording
             ? 'Grabación en curso'
             : 'Listo para grabar';
-    String buttonText = isUploading
+    final String buttonText = isUploading
         ? 'Subiendo'
         : isRecording
             ? 'Grabando'
             : 'Listo';
-    Color buttonColor = isUploading
+    final Color buttonColor = isUploading
         ? Colors.orange
         : isRecording
             ? Colors.red
             : Colors.green;
-    String bottomText = isUploading
+    final String bottomText = isUploading
         ? 'La subida finalizará pronto'
         : isRecording
             ? 'La grabación finalizará a las ${stopScheduledTime.format(context)}'
