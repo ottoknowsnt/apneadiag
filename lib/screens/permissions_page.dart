@@ -33,7 +33,8 @@ class PermissionsPage extends StatelessWidget {
                 textAlign: TextAlign.center, softWrap: true, style: styleTitle),
             const SizedBox(height: 30),
             Text(
-                'Pulse en cada botón para conceder cada permiso \nSi el botón está desactivado, el permiso ya está concedido',
+                'Pulse en cada botón para conceder cada permiso \n'
+                'Si el botón está desactivado, el permiso ya está concedido',
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: styleSubtitle),
@@ -51,7 +52,8 @@ class PermissionsPage extends StatelessWidget {
               ),
             ),
             Text(
-                'Si se le presentan varias opciones, seleccione "Siempre" o "Mientras se usa la aplicación"',
+                'Si se le presentan varias opciones, seleccione "Siempre" o '
+                '"Mientras se usa la aplicación"',
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: styleSubtitle),
@@ -77,7 +79,8 @@ class PermissionsPage extends StatelessWidget {
                   textAlign: TextAlign.center, softWrap: true),
             ),
             Text(
-                'Si se le presentan varias opciones, seleccione "Sin restricciones"',
+                'Si se le presentan varias opciones, seleccione '
+                '"Sin restricciones"',
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: styleSubtitle),

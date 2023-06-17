@@ -88,8 +88,10 @@ class _RecorderPageState extends State<RecorderPage> {
     final String bottomText = isUploading
         ? 'La subida finalizará pronto'
         : isRecording
-            ? 'La grabación finalizará a las ${stopScheduledTime.format(context)}'
-            : 'La grabación empezará a las ${startScheduledTime.format(context)}';
+            ? 'La grabación finalizará a las '
+                '${stopScheduledTime.format(context)}'
+            : 'La grabación empezará a las '
+                '${startScheduledTime.format(context)}';
 
     return Center(
       child: SingleChildScrollView(
@@ -164,7 +166,9 @@ class _RecorderPageState extends State<RecorderPage> {
                     child: Text(
                       _isCharging
                           ? 'Las condiciones son óptimas'
-                          : 'No podemos asegurar unas condiciones óptimas.\nCompruebe los avisos en la parte superior de la pantalla.',
+                          : 'No podemos asegurar unas condiciones óptimas.\n'
+                              'Compruebe los avisos en la parte superior de la '
+                              'pantalla.',
                       textAlign: TextAlign.center,
                       softWrap: true,
                       style: styleSubtitle,
