@@ -27,11 +27,15 @@ class Apneadiag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (BuildContext context) => SoundRecorder()),
-        ChangeNotifierProvider(create: (BuildContext context) => AppData()),
-        ChangeNotifierProvider(create: (BuildContext context) => ServerUpload()),
-        ChangeNotifierProvider(create: (BuildContext context) => PermissionManager()),
+      providers: <ChangeNotifierProvider<dynamic>>[
+        ChangeNotifierProvider<SoundRecorder>(
+            create: (BuildContext context) => SoundRecorder()),
+        ChangeNotifierProvider<AppData>(
+            create: (BuildContext context) => AppData()),
+        ChangeNotifierProvider<ServerUpload>(
+            create: (BuildContext context) => ServerUpload()),
+        ChangeNotifierProvider<PermissionManager>(
+            create: (BuildContext context) => PermissionManager()),
       ],
       child: MaterialApp(
         title: 'Apneadiag',

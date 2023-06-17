@@ -38,7 +38,7 @@ class SettingsPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text('Ajustes',
                 style: styleTitle, textAlign: TextAlign.center, softWrap: true),
             const SizedBox(height: 10),
@@ -85,7 +85,7 @@ class SettingsPage extends StatelessWidget {
                   softWrap: true),
             ),
             const Divider(),
-            if (lastRecordingPath.isNotEmpty) ...[
+            if (lastRecordingPath.isNotEmpty) ...<Widget>[
               Text('Última grabación',
                   style: style, textAlign: TextAlign.center, softWrap: true),
               TextButton.icon(

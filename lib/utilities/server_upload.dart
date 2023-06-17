@@ -6,7 +6,6 @@ import 'app_data.dart';
 import 'local_notifications.dart';
 
 class ServerUpload extends ChangeNotifier {
-
   factory ServerUpload() {
     return _instance;
   }
@@ -21,7 +20,8 @@ class ServerUpload extends ChangeNotifier {
       'POST',
       Uri.parse(serverAddress),
     );
-    final http.MultipartFile file = await http.MultipartFile.fromPath('files', filePath);
+    final http.MultipartFile file =
+        await http.MultipartFile.fromPath('files', filePath);
     double fileSize = double.parse(file.length.toString());
     // Convert file size to MB
     fileSize = fileSize / (1024 * 1024);
@@ -31,7 +31,10 @@ class ServerUpload extends ChangeNotifier {
     _isUploading = true;
     notifyListeners();
     final Stopwatch stopwatch = Stopwatch()..start();
-    await request.send().timeout(const Duration(minutes: 10)).then((http.StreamedResponse response) async {
+    await request
+        .send()
+        .timeout(const Duration(minutes: 10))
+        .then((http.StreamedResponse response) async {
       stopwatch.stop();
 
       final DateTime now = DateTime.now();
@@ -54,7 +57,7 @@ class ServerUpload extends ChangeNotifier {
       // Only keep 2 decimal places
       speed = double.parse(speed.toStringAsFixed(2));
       await AppData().setUploadSpeed(speed);
-    }).catchError((error) {
+    }).catchError((dynamic error) {
       stopwatch.stop();
 
       final DateTime now = DateTime.now();

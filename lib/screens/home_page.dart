@@ -22,15 +22,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final AppData appData = context.watch<AppData>();
     final bool isLogged = appData.isLogged;
-    final PermissionManager permissionManager = context.watch<PermissionManager>();
+    final PermissionManager permissionManager =
+        context.watch<PermissionManager>();
     final bool allPermissionsGranted = permissionManager.allPermissionsGranted;
 
     if (!isLogged) {
-      return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
         return const OnboardingPage();
       });
     } else if (!allPermissionsGranted) {
-      return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
           body: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
@@ -60,10 +63,11 @@ class _HomePageState extends State<HomePage> {
           throw UnimplementedError('no widget for $selectedIndex');
       }
 
-      return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
           bottomNavigationBar: NavigationBar(
-            destinations: const [
+            destinations: const <NavigationDestination>[
               NavigationDestination(
                 icon: Icon(Icons.mic),
                 label: 'Grabadora',

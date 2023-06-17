@@ -7,7 +7,8 @@ class PermissionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PermissionManager permissionManager = context.watch<PermissionManager>();
+    final PermissionManager permissionManager =
+        context.watch<PermissionManager>();
     final bool micPermissionGranted = permissionManager.micPermissionGranted;
     final bool notificationPermissionGranted =
         permissionManager.notificationPermissionGranted;
@@ -27,7 +28,7 @@ class PermissionsPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text('Conceda los siguientes permisos',
                 textAlign: TextAlign.center, softWrap: true, style: styleTitle),
             const SizedBox(height: 30),
@@ -83,7 +84,7 @@ class PermissionsPage extends StatelessWidget {
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 Icon(
                   allPermissionsGranted ? Icons.check : Icons.close,
                   color: allPermissionsGranted ? Colors.green : Colors.red,

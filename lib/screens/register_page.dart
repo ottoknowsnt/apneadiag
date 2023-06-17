@@ -32,7 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Text('Introduzca los datos del paciente',
                   textAlign: TextAlign.center,
                   softWrap: true,
@@ -53,7 +53,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   id = value!;
                 },
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -71,7 +73,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   age = int.parse(value!);
                 },
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -90,9 +94,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
+                inputFormatters: <TextInputFormatter>[
                   // Convert comma to dot
-                  TextInputFormatter.withFunction((TextEditingValue oldValue, TextEditingValue newValue) {
+                  TextInputFormatter.withFunction(
+                      (TextEditingValue oldValue, TextEditingValue newValue) {
                     return newValue.copyWith(
                       text: newValue.text.replaceAll(',', '.'),
                     );
@@ -117,14 +122,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   height = int.parse(value!);
                 },
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () => {
+                onPressed: () => <void>{
                   if (_formKey.currentState!.validate())
-                    {
-                      showDialog(
+                    <void>{
+                      showDialog<void>(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
@@ -132,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 textAlign: TextAlign.left, softWrap: true),
                             content: const Text('¿Desea confirmar los datos?',
                                 textAlign: TextAlign.left, softWrap: true),
-                            actions: [
+                            actions: <Widget>[
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);

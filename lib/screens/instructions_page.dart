@@ -17,7 +17,7 @@ class InstructionsPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text('Instrucciones de uso',
                 textAlign: TextAlign.center, softWrap: true, style: styleTitle),
             const SizedBox(height: 10),
@@ -26,7 +26,7 @@ class InstructionsPage extends StatelessWidget {
                 softWrap: true,
                 style: styleSubtitle),
             const SizedBox(height: 30),
-            FutureBuilder(
+            FutureBuilder<String>(
               future: DefaultAssetBundle.of(context)
                   .loadString('assets/text/instructions.txt'),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {

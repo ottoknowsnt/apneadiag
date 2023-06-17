@@ -19,7 +19,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final PermissionManager permissionManager = context.watch<PermissionManager>();
+    final PermissionManager permissionManager =
+        context.watch<PermissionManager>();
     final bool allPermissionsGranted = permissionManager.allPermissionsGranted;
 
     return Scaffold(
@@ -37,7 +38,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   currentIndex = index;
                 });
               },
-              children: const [
+              children: const <Widget>[
                 InstructionsPage(),
                 PermissionsPage(),
                 RegisterPage(),
@@ -49,7 +50,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: <Widget>[
             TextButton(
               onPressed: currentIndex == 0
                   ? null

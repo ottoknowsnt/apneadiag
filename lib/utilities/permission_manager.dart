@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionManager extends ChangeNotifier {
-
   factory PermissionManager() {
     return _instance;
   }
