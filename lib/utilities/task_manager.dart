@@ -3,34 +3,37 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class TaskManager {
-  static List<Timer> _timers = [];
+  static List<Timer> _timers = <Timer>[];
   static Duration calculateInitialDelay(TimeOfDay scheduledTime) {
-    var now = DateTime.now();
-    var scheduledDateTime = DateTime(now.year, now.month,
-        now.day, scheduledTime.hour, scheduledTime.minute);
+    final DateTime now = DateTime.now();
+    DateTime scheduledDateTime = DateTime(
+        now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
+
     if (scheduledDateTime.isBefore(now)) {
       scheduledDateTime = scheduledDateTime.add(const Duration(days: 1));
     }
+
+    // Duration until the scheduled DateTime
     return scheduledDateTime.difference(now);
   }
 
   static void scheduleTask(
-      {required TimeOfDay scheduledTime, required Function() task}) {
+      {required TimeOfDay scheduledTime, required void Function() task}) {
     // We create a timer to run the first time the task is scheduled
     // and another timer to run the task periodically
     _timers.add(Timer(
         calculateInitialDelay(scheduledTime),
-        () => {
+        () => <void>{
               task(),
-              _timers.add(
-                  Timer.periodic(const Duration(days: 1), (timer) => task()))
+              _timers.add(Timer.periodic(
+                  const Duration(days: 1), (Timer timer) => task()))
             }));
   }
 
   static void cancelAllTasks() {
-    for (var timer in _timers) {
+    for (final Timer timer in _timers) {
       timer.cancel();
     }
-    _timers = [];
+    _timers = <Timer>[];
   }
 }

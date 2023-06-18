@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/utilities/app_data.dart';
+import '../utilities/app_data.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,14 +15,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    var appData = context.watch<AppData>();
+    final AppData appData = context.watch<AppData>();
     String id = '';
     int age = 0;
-    double weight = 0.0;
+    double weight = 0;
     int height = 0;
 
-    var theme = Theme.of(context);
-    var styleTitle = theme.textTheme.titleLarge!.copyWith(
+    final ThemeData theme = Theme.of(context);
+    final TextStyle styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
 
@@ -32,7 +32,7 @@ class _RegisterPageState extends State<RegisterPage> {
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Text('Introduzca los datos del paciente',
                   textAlign: TextAlign.center,
                   softWrap: true,
@@ -43,17 +43,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   border: OutlineInputBorder(),
                   labelText: 'ID',
                 ),
-                validator: (value) {
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'El ID está vacío.';
                   }
                   return null;
                 },
-                onSaved: (value) {
+                onSaved: (String? value) {
                   id = value!;
                 },
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -61,17 +63,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   border: OutlineInputBorder(),
                   labelText: 'Edad',
                 ),
-                validator: (value) {
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'La edad está vacía.';
                   }
                   return null;
                 },
-                onSaved: (value) {
+                onSaved: (String? value) {
                   age = int.parse(value!);
                 },
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -79,24 +83,26 @@ class _RegisterPageState extends State<RegisterPage> {
                   border: OutlineInputBorder(),
                   labelText: 'Peso (kg)',
                 ),
-                validator: (value) {
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'El peso está vacío.';
                   }
                   return null;
                 },
-                onSaved: (value) {
+                onSaved: (String? value) {
                   weight = double.parse(value!);
                 },
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
+                inputFormatters: <TextInputFormatter>[
                   // Convert comma to dot
-                  TextInputFormatter.withFunction((oldValue, newValue) {
+                  TextInputFormatter.withFunction(
+                      (TextEditingValue oldValue, TextEditingValue newValue) {
                     return newValue.copyWith(
                       text: newValue.text.replaceAll(',', '.'),
                     );
                   }),
+
                   // Allow Decimal Number With Precision of 2 Only
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,1}')),
                 ],
@@ -107,32 +113,34 @@ class _RegisterPageState extends State<RegisterPage> {
                   border: OutlineInputBorder(),
                   labelText: 'Altura (cm)',
                 ),
-                validator: (value) {
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'La altura está vacía.';
                   }
                   return null;
                 },
-                onSaved: (value) {
+                onSaved: (String? value) {
                   height = int.parse(value!);
                 },
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () => {
+                onPressed: () => <void>{
                   if (_formKey.currentState!.validate())
-                    {
-                      showDialog(
+                    <void>{
+                      showDialog<void>(
                         context: context,
-                        builder: (context) {
+                        builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('Confirmación',
                                 textAlign: TextAlign.left, softWrap: true),
                             content: const Text('¿Desea confirmar los datos?',
                                 textAlign: TextAlign.left, softWrap: true),
-                            actions: [
+                            actions: <Widget>[
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -145,6 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onPressed: () {
                                   _formKey.currentState!.save();
                                   appData.login(id, age, weight, height);
+
                                   Navigator.pop(context);
                                 },
                                 child: const Text('Confirmar',

@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionManager extends ChangeNotifier {
-  static bool _micPermissionGranted = false;
-  static bool _notificationPermissionGranted = false;
-  static bool _ignoreBatteryOptimizationsGranted = false;
-
-  static final PermissionManager _instance = PermissionManager._internal();
-
   factory PermissionManager() {
     return _instance;
   }
 
   PermissionManager._internal();
+  static bool _micPermissionGranted = false;
+  static bool _notificationPermissionGranted = false;
+  static bool _ignoreBatteryOptimizationsGranted = false;
+
+  static final PermissionManager _instance = PermissionManager._internal();
 
   static Future<void> init() async {
     _micPermissionGranted = await Permission.microphone.isGranted;

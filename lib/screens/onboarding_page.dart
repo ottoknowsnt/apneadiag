@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/screens/register_page.dart';
-import 'package:apneadiag/screens/permissions_page.dart';
-import 'package:apneadiag/utilities/permission_manager.dart';
-import 'package:apneadiag/screens/instructions_page.dart';
+
+import '../utilities/permission_manager.dart';
+import 'instructions_page.dart';
+import 'permissions_page.dart';
+import 'register_page.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -13,13 +14,14 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  var currentIndex = 0;
-  final pageController = PageController();
+  int currentIndex = 0;
+  final PageController pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-    var permissionManager = context.watch<PermissionManager>();
-    var allPermissionsGranted = permissionManager.allPermissionsGranted;
+    final PermissionManager permissionManager =
+        context.watch<PermissionManager>();
+    final bool allPermissionsGranted = permissionManager.allPermissionsGranted;
 
     return Scaffold(
       body: Container(
@@ -27,16 +29,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
         alignment: Alignment.center,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: PageView(
               controller: pageController,
               physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
+              onPageChanged: (int index) {
                 setState(() {
                   currentIndex = index;
                 });
               },
-              children: const [
+              children: const <Widget>[
                 InstructionsPage(),
                 PermissionsPage(),
                 RegisterPage(),
@@ -48,8 +50,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: <Widget>[
             TextButton(
+              // No back button on first page
               onPressed: currentIndex == 0
                   ? null
                   : () {
@@ -62,6 +65,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   textAlign: TextAlign.center, softWrap: true),
             ),
             TextButton(
+              // No next button if permissions are not granted or on last page
               onPressed: (currentIndex == 1 && !allPermissionsGranted) ||
                       currentIndex == 2
                   ? null

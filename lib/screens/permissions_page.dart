@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/utilities/permission_manager.dart';
+import '../utilities/permission_manager.dart';
 
 class PermissionsPage extends StatelessWidget {
   const PermissionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var permissionManager = context.watch<PermissionManager>();
-    var micPermissionGranted = permissionManager.micPermissionGranted;
-    var notificationPermissionGranted =
+    final PermissionManager permissionManager =
+        context.watch<PermissionManager>();
+    final bool micPermissionGranted = permissionManager.micPermissionGranted;
+    final bool notificationPermissionGranted =
         permissionManager.notificationPermissionGranted;
-    var ignoreBatteryOptimizationsGranted =
+    final bool ignoreBatteryOptimizationsGranted =
         permissionManager.ignoreBatteryOptimizationsGranted;
-    var allPermissionsGranted = permissionManager.allPermissionsGranted;
+    final bool allPermissionsGranted = permissionManager.allPermissionsGranted;
 
-    var theme = Theme.of(context);
-    var styleTitle = theme.textTheme.titleLarge!.copyWith(
+    final ThemeData theme = Theme.of(context);
+    final TextStyle styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
-    var styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
+    final TextStyle styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
 
@@ -27,12 +28,13 @@ class PermissionsPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text('Conceda los siguientes permisos',
                 textAlign: TextAlign.center, softWrap: true, style: styleTitle),
             const SizedBox(height: 30),
             Text(
-                'Pulse en cada botón para conceder cada permiso \nSi el botón está desactivado, el permiso ya está concedido',
+                'Pulse en cada botón para conceder cada permiso \n'
+                'Si el botón está desactivado, el permiso ya está concedido',
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: styleSubtitle),
@@ -50,7 +52,8 @@ class PermissionsPage extends StatelessWidget {
               ),
             ),
             Text(
-                'Si se le presentan varias opciones, seleccione "Siempre" o "Mientras se usa la aplicación"',
+                'Si se le presentan varias opciones, seleccione "Siempre" o '
+                '"Mientras se usa la aplicación"',
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: styleSubtitle),
@@ -76,14 +79,15 @@ class PermissionsPage extends StatelessWidget {
                   textAlign: TextAlign.center, softWrap: true),
             ),
             Text(
-                'Si se le presentan varias opciones, seleccione "Sin restricciones"',
+                'Si se le presentan varias opciones, seleccione '
+                '"Sin restricciones"',
                 textAlign: TextAlign.center,
                 softWrap: true,
                 style: styleSubtitle),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 Icon(
                   allPermissionsGranted ? Icons.check : Icons.close,
                   color: allPermissionsGranted ? Colors.green : Colors.red,

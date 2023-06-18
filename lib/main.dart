@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/screens/home_page.dart';
-import 'package:apneadiag/utilities/local_notifications.dart';
-import 'package:apneadiag/utilities/sound_recorder.dart';
-import 'package:apneadiag/utilities/app_data.dart';
-import 'package:apneadiag/utilities/server_upload.dart';
-import 'package:apneadiag/utilities/permission_manager.dart';
+
+import 'screens/home_page.dart';
+import 'utilities/app_data.dart';
+import 'utilities/local_notifications.dart';
+import 'utilities/permission_manager.dart';
+import 'utilities/server_upload.dart';
+import 'utilities/sound_recorder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,11 +27,15 @@ class Apneadiag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => SoundRecorder()),
-        ChangeNotifierProvider(create: (context) => AppData()),
-        ChangeNotifierProvider(create: (context) => ServerUpload()),
-        ChangeNotifierProvider(create: (context) => PermissionManager()),
+      providers: <ChangeNotifierProvider<dynamic>>[
+        ChangeNotifierProvider<SoundRecorder>(
+            create: (BuildContext context) => SoundRecorder()),
+        ChangeNotifierProvider<AppData>(
+            create: (BuildContext context) => AppData()),
+        ChangeNotifierProvider<ServerUpload>(
+            create: (BuildContext context) => ServerUpload()),
+        ChangeNotifierProvider<PermissionManager>(
+            create: (BuildContext context) => PermissionManager()),
       ],
       child: MaterialApp(
         title: 'Apneadiag',

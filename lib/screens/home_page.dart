@@ -1,11 +1,12 @@
-import 'package:apneadiag/screens/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apneadiag/screens/recorder_page.dart';
-import 'package:apneadiag/screens/settings_page.dart';
-import 'package:apneadiag/utilities/app_data.dart';
-import 'package:apneadiag/screens/permissions_page.dart';
-import 'package:apneadiag/utilities/permission_manager.dart';
+
+import '../utilities/app_data.dart';
+import '../utilities/permission_manager.dart';
+import 'onboarding_page.dart';
+import 'permissions_page.dart';
+import 'recorder_page.dart';
+import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,28 +16,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var selectedIndex = 0;
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    var appData = context.watch<AppData>();
-    var isLogged = appData.isLogged;
-    var permissionManager = context.watch<PermissionManager>();
-    var allPermissionsGranted = permissionManager.allPermissionsGranted;
+    final AppData appData = context.watch<AppData>();
+    final bool isLogged = appData.isLogged;
+
+    final PermissionManager permissionManager =
+        context.watch<PermissionManager>();
+    final bool allPermissionsGranted = permissionManager.allPermissionsGranted;
 
     if (!isLogged) {
-      return LayoutBuilder(builder: (context, constraints) {
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
         return const OnboardingPage();
       });
     } else if (!allPermissionsGranted) {
-      return LayoutBuilder(builder: (context, constraints) {
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
           body: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
             alignment: Alignment.center,
             child: const SafeArea(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8),
                 child: PermissionsPage(),
               ),
             ),
@@ -47,6 +52,7 @@ class _HomePageState extends State<HomePage> {
       // We have all permissions and the user is logged in
       // We can start the recording service
       AppData.scheduleRecording();
+
       Widget page;
       switch (selectedIndex) {
         case 0:
@@ -59,10 +65,11 @@ class _HomePageState extends State<HomePage> {
           throw UnimplementedError('no widget for $selectedIndex');
       }
 
-      return LayoutBuilder(builder: (context, constraints) {
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
           bottomNavigationBar: NavigationBar(
-            destinations: const [
+            destinations: const <NavigationDestination>[
               NavigationDestination(
                 icon: Icon(Icons.mic),
                 label: 'Grabadora',
@@ -73,7 +80,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
             selectedIndex: selectedIndex,
-            onDestinationSelected: (value) {
+            onDestinationSelected: (int value) {
               setState(() {
                 selectedIndex = value;
               });
@@ -84,7 +91,7 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.center,
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: page,
               ),
             ),

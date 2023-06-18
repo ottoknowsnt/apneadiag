@@ -5,11 +5,11 @@ class InstructionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var styleTitle = theme.textTheme.titleLarge!.copyWith(
+    final ThemeData theme = Theme.of(context);
+    final TextStyle styleTitle = theme.textTheme.titleLarge!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
-    var styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
+    final TextStyle styleSubtitle = theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.onPrimaryContainer,
     );
 
@@ -17,7 +17,7 @@ class InstructionsPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text('Instrucciones de uso',
                 textAlign: TextAlign.center, softWrap: true, style: styleTitle),
             const SizedBox(height: 10),
@@ -26,10 +26,10 @@ class InstructionsPage extends StatelessWidget {
                 softWrap: true,
                 style: styleSubtitle),
             const SizedBox(height: 30),
-            FutureBuilder(
+            FutureBuilder<String>(
               future: DefaultAssetBundle.of(context)
                   .loadString('assets/text/instructions.txt'),
-              builder: (context, snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.hasData) {
                   return Text(snapshot.data as String,
                       textAlign: TextAlign.center,
