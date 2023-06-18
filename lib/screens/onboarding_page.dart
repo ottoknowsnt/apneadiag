@@ -52,6 +52,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             TextButton(
+              // No back button on first page
               onPressed: currentIndex == 0
                   ? null
                   : () {
@@ -64,6 +65,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   textAlign: TextAlign.center, softWrap: true),
             ),
             TextButton(
+              // No next button if permissions are not granted or on last page
               onPressed: (currentIndex == 1 && !allPermissionsGranted) ||
                       currentIndex == 2
                   ? null

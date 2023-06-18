@@ -44,7 +44,9 @@ class AppData extends ChangeNotifier {
 
   static Future<void> scheduleRecording() async {
     await LocalNotifications.cancelAllNotifications();
+
     TaskManager.cancelAllTasks();
+
     TaskManager.scheduleTask(
         scheduledTime: _startScheduledTime,
         task: () async {
@@ -55,6 +57,7 @@ class AppData extends ChangeNotifier {
         task: () async {
           await SoundRecorder().stop();
         });
+
     // Schedule a notification to remind the user of the recording 15 minutes
     // before it starts
     int subHour = 0;
@@ -73,6 +76,7 @@ class AppData extends ChangeNotifier {
             hour: _startScheduledTime.hour - subHour,
             minute: (_startScheduledTime.minute - 15) % 60),
         fullScreenIntent: false);
+
     // Schedule a notification to remind the user of the recording 1 minute
     // before it starts
     if ((_startScheduledTime.minute - 1) < 0) {
@@ -101,6 +105,7 @@ class AppData extends ChangeNotifier {
     await prefs.setInt('age', _age);
     await prefs.setDouble('weight', _weight);
     await prefs.setInt('height', _height);
+
     notifyListeners();
   }
 
@@ -108,6 +113,7 @@ class AppData extends ChangeNotifier {
     _lastRecordingPath = path;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('lastRecordingPath', _lastRecordingPath);
+
     notifyListeners();
   }
 
@@ -117,7 +123,9 @@ class AppData extends ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('startScheduledTimeHour', _startScheduledTime.hour);
     await prefs.setInt('startScheduledTimeMinute', _startScheduledTime.minute);
+
     await scheduleRecording();
+
     notifyListeners();
   }
 
@@ -125,6 +133,7 @@ class AppData extends ChangeNotifier {
     _uploadSpeed = speed;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('uploadSpeed', _uploadSpeed);
+
     notifyListeners();
   }
 

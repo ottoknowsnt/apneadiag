@@ -17,7 +17,6 @@ class RecorderPage extends StatefulWidget {
 
 class _RecorderPageState extends State<RecorderPage> {
   final Battery _battery = Battery();
-
   BatteryState? _batteryState;
   StreamSubscription<BatteryState>? _batteryStateSubscription;
   bool _isCharging = false;
@@ -34,6 +33,7 @@ class _RecorderPageState extends State<RecorderPage> {
     if (_batteryState == state) {
       return;
     }
+
     setState(() {
       _batteryState = state;
       _isCharging = state == BatteryState.charging;
@@ -54,8 +54,10 @@ class _RecorderPageState extends State<RecorderPage> {
     final double uploadSpeed = appData.uploadSpeed;
     final TimeOfDay startScheduledTime = appData.startScheduledTime;
     final TimeOfDay stopScheduledTime = appData.stopScheduledTime;
+
     final SoundRecorder recorder = context.watch<SoundRecorder>();
     final bool isRecording = recorder.isRecording;
+
     final ServerUpload serverUpload = context.watch<ServerUpload>();
     final bool isUploading = serverUpload.isUploading;
 
@@ -75,16 +77,19 @@ class _RecorderPageState extends State<RecorderPage> {
         : isRecording
             ? 'Grabación en curso'
             : 'Listo para grabar';
+
     final String buttonText = isUploading
         ? 'Subiendo'
         : isRecording
             ? 'Grabando'
             : 'Listo';
+
     final Color buttonColor = isUploading
         ? Colors.orange
         : isRecording
             ? Colors.red
             : Colors.green;
+
     final String bottomText = isUploading
         ? 'La subida finalizará pronto'
         : isRecording

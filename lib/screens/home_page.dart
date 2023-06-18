@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final AppData appData = context.watch<AppData>();
     final bool isLogged = appData.isLogged;
+
     final PermissionManager permissionManager =
         context.watch<PermissionManager>();
     final bool allPermissionsGranted = permissionManager.allPermissionsGranted;
@@ -51,6 +52,7 @@ class _HomePageState extends State<HomePage> {
       // We have all permissions and the user is logged in
       // We can start the recording service
       AppData.scheduleRecording();
+
       Widget page;
       switch (selectedIndex) {
         case 0:

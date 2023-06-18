@@ -8,9 +8,12 @@ class TaskManager {
     final DateTime now = DateTime.now();
     DateTime scheduledDateTime = DateTime(
         now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
+
     if (scheduledDateTime.isBefore(now)) {
       scheduledDateTime = scheduledDateTime.add(const Duration(days: 1));
     }
+
+    // Duration until the scheduled DateTime
     return scheduledDateTime.difference(now);
   }
 

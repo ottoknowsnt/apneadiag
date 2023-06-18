@@ -61,6 +61,7 @@ class LocalNotifications {
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
+
     await _flutterLocalNotificationsPlugin
         .show(id, title, body, platformChannelSpecifics, payload: 'Apneadiag');
   }
@@ -71,12 +72,14 @@ class LocalNotifications {
       required String body,
       required TimeOfDay scheduledTime,
       required bool fullScreenIntent}) async {
+    // Transform the scheduledTime to be able to schedule the notification
     final DateTime now = DateTime.now();
     final DateTime scheduledDateTime = DateTime(
         now.year, now.month, now.day, scheduledTime.hour, scheduledTime.minute);
     tz_data.initializeTimeZones();
     final tz.TZDateTime scheduledDateTz =
         tz.TZDateTime.from(scheduledDateTime, tz.local);
+
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'apneadiag',
@@ -89,11 +92,13 @@ class LocalNotifications {
     );
     final NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
+
     await _flutterLocalNotificationsPlugin.zonedSchedule(
         id, title, body, scheduledDateTz, platformChannelSpecifics,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
+        // DateTimeComponents.time for a daily scheduled notification
         matchDateTimeComponents: DateTimeComponents.time,
         payload: 'Apneadiag');
   }

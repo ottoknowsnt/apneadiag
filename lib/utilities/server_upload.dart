@@ -28,9 +28,13 @@ class ServerUpload extends ChangeNotifier {
     request.files.add(
       file,
     );
+
     _isUploading = true;
     notifyListeners();
+
+    // We use a stopwatch to measure the upload speed
     final Stopwatch stopwatch = Stopwatch()..start();
+
     await request
         .send()
         .timeout(const Duration(minutes: 10))

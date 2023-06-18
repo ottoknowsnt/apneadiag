@@ -102,6 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       text: newValue.text.replaceAll(',', '.'),
                     );
                   }),
+
                   // Allow Decimal Number With Precision of 2 Only
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,1}')),
                 ],
@@ -152,6 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onPressed: () {
                                   _formKey.currentState!.save();
                                   appData.login(id, age, weight, height);
+
                                   Navigator.pop(context);
                                 },
                                 child: const Text('Confirmar',
