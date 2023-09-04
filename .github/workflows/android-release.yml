@@ -12,7 +12,7 @@ jobs:
     name: Create Android Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download Android keystore
         id: android_keystore
         uses: timheuer/base64-to-file@v1
